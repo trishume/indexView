@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>S&P Viewer</title>
+  <script type="text/javascript" src="sp.json"></script>
+  <script type="text/javascript">
+    var topPad = 50;
+
+    var width, height, data, canvas, ctx;
+    var startMonth, endMonth, min, max;
+
+    function $(id) { return document.getElementById(id);}
+    Number.prototype.formatMoney = function(c, d, t){
+      var n = this,
+          c = isNaN(c = Math.abs(c)) ? 2 : c,
+          d = d == undefined ? "." : d,
+          t = t == undefined ? "," : t,
+          s = n < 0 ? "-" : "",
+          i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
+          j = (j = i.length) > 3 ? j % 3 : 0;
+         return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+    };
+
+    function loadCanvas(){
+      canvas = $('graph');
+      width = canvas.width;
+      height = canvas.height;
+      if (canvas.getContext){
+        ctx = canvas.getContext('2d');
+
+        canvas.addEventListener('mousewheel',function(event){
+            zoom(event);
+            return false;
+        }, false);
+
+        data = spData["data"];
+        startMonth = 1200;
+        endMonth = data.length;
+        draw();
+      }
+    }
+
+    function zoom(event) {
+      var deltaFactor = (event.deltaMode == WheelEvent.DOM_DELTA_LINE) ? 20 : 1;
+      var delta = event.deltaY * deltaFactor;
+      var mouseX = event.clientX - canvas.offsetLeft;
+
+      var span = endMonth-startMonth;
+      var centerMonth = startMonth + mouseX/(width/span);
+      var factor = 1 + delta * 0.0002;
+      endMonth = Math.round(factor*endMonth - centerMonth*(factor - 1));
+      startMonth = Math.round(factor*startMonth + centerMonth*(1 - factor));
+
+      startMonth = Math.max(startMonth,0);
+      endMonth = Math.min(Math.max(endMonth,startMonth+10), data.length);
+      draw();
+    }
+
+    function updateStats() {
+      var totalGrowth = data[endMonth-1]/data[startMonth];
+      var avgGrowth = Math.pow(totalGrowth,(12/(endMonth-startMonth)))-1;
+      var doubled = Math.log(totalGrowth)/Math.log(2);
+      // console.log([data[startMonth],data[endMonth],endMonth,totalGrowth]);
+      $('stat-growth').innerHTML = String((avgGrowth*100).toFixed(2)) + '%';
+      $('stat-total').innerHTML = "$" + totalGrowth.formatMoney(2,'.',',');
+      $('stat-doubled').innerHTML = String(doubled.toFixed(2));
+    }
+
+    function dataRange(data, startMonth, endMonth) {
+      min = Infinity;
+      max = 0.0;
+      for (var i = startMonth; i < endMonth; i++) {
+        if(data[i]>max) max = data[i];
+        if(data[i]<min) min = data[i];
+      };
+    }
+
+    function draw() {
+      drawData(ctx, data, startMonth, endMonth);
+
+      var startYear = Math.round(spData["start"] + (startMonth/12));
+      var endYear = Math.round(spData["start"] + (endMonth/12));
+      ctx.font = "20pt sans-serif";
+      ctx.fillText(String(startYear) + " - " + String(endYear),10,30);
+
+      updateStats();
+    }
+
+    function drawData(ctx, data, startMonth, endMonth){
+      dataRange(data, startMonth, endMonth);
+      var span = endMonth-startMonth;
+      var dx = (width/span);
+      var jump = Math.ceil(span/width);
+
+      ctx.clearRect(0,0,width, height);
+
+      // Year lines
+      var minSpace = 20;
+      var alpha = Math.min((dx*12)/minSpace*0.7,0.7);
+      if (alpha < 0.3) alpha = 0.0;
+      ctx.strokeStyle = "rgba(202,226,255,"+alpha+")";
+      ctx.lineWidth = 1;
+
+      ctx.beginPath();
+      for (var i = startMonth; i < endMonth; i++) {
+        if (i % 12 == 0) {
+          var x = (i-startMonth)*dx;
+          ctx.moveTo(x,0);
+          ctx.lineTo(x,height);
+        }
+      };
+      ctx.stroke();
+
+      // Graph
+      ctx.strokeStyle = "rgb(74,144,226)";
+      ctx.lineWidth = 4;
+      ctx.lineJoin = "round";
+
+      ctx.beginPath();
+      ctx.moveTo(0,height);
+      for (var i = startMonth; i < endMonth; i+=jump) {
+        var y = (data[i]-min)/(max-min)*(height-topPad);
+        var x = (i-startMonth)*dx;
+        ctx.lineTo(x,height - y);
+      };
+      ctx.stroke();
+    }
+  </script>
+  <style type="text/css">
+    body {
+      font-family: sans-serif;
+    }
+
+    #widget {
+      /*border: 2px solid #4A90E2;*/
+    }
+
+    #graph {
+      /*border: 1px solid black;*/
+      float: left;
+    }
+    #stats {
+      float: left;
+      padding-left: 1em;
+      width: 200px;
+      text-align: right;
+    }
+
+    #stats strong {
+      font-weight: normal;
+      font-size: 15pt;
+    }
+
+    #stats .num {
+      font-size: 15pt;
+      color: blue;
+    }
+
+    .sep {
+      clear: both;
+      height: 10px;
+    }
+  </style>
+</head>
+<body onload="loadCanvas();">
+  <h1>S&amp;P 500 Index</h1>
+  <div id="widget">
+    <canvas id="graph" width="500" height="200"></canvas>
+    <div id="stats">
+      <strong>Average Growth</strong><br>
+      <div class="num" id="stat-growth"></div><br>
+      <strong>One Dollar Becomes</strong><br>
+      <div class="num" id="stat-total"></div><br>
+      <strong>Times Doubled</strong><br>
+      <div class="num" id="stat-doubled"></div><br>
+    </div>
+    <div class="sep"></div>
+  </div>
+  <p><strong>Note:</strong> Scroll to zoom and move around. Better date entry coming soon.</p>
+</body>
+</html>
