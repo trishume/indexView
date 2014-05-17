@@ -30,6 +30,7 @@ var defaultStats = [Stats.averageGrowth, Stats.dollarsNow, Stats.timesDoubled, S
 var dataSets = [
   {
     name: "S&P500",
+    notes: "Historical S&P500 data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>. Not inflation adjusted. Dividends not reinvested.",
     file: "shiller_absolute.json",
     statFuncs: defaultStats,
     startYear: function(struct) {return struct["start"];},
@@ -39,6 +40,7 @@ var dataSets = [
   },
   {
     name: "S&P500 (Reinvested Dividends)",
+    notes: "Historical S&P500 data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>. Not inflation adjusted. Includes reinvested dividends.",
     file: "shiller_absolute.json",
     statFuncs: defaultStats,
     startYear: function(struct) {return struct["start"];},
@@ -78,6 +80,8 @@ function loadData(setNum) {
   var set = dataSets[setNum];
   var startYear = set.startYear(spData);
   var data = set.datFunc(spData);
+
+  $('dataset-notes').innerHTML = set.notes;
 
   Viewer.loadData(data, startYear, set.statFuncs);
 }
