@@ -1,25 +1,37 @@
-Viewer = {data: null, topPad: 50};
+var Viewer = {
+    data: null,
+    topPad: 50,
 
-Viewer.loadCanvas = function(){
+loadCanvas: function () {
   this.canvas = $('graph');
   this.width = this.canvas.width;
   this.height = this.canvas.height;
-  if (this.canvas.getContext){
+  if (this.canvas.getContext) {
     this.ctx = this.canvas.getContext('2d');
 
     var _zoom = this.zoom.bind(this);
-    this.canvas.addEventListener('mousewheel',function(event){
+    this.canvas.addEventListener('mousewheel',function(event) {
         _zoom(event);
         event.preventDefault();
         return false;
     }, false);
   }
 
+  this.curTimeMode = 0;
+  this.loadTimeChooser();
+
   this.startMonth = 1200;
   this.endMonth = Infinity;
-}
+},
 
-Viewer.loadData = function(data, startYear, statFuncs) {
+loadTimeChooser: function() {
+  for (var i = 0; i < 3; i++) {
+    var status = (i == this.curTimeMode) ? 'inherit' : 'none';
+    $('time-mode-'+i).style.display = status;
+  }
+},
+
+loadData: function (data, startYear, statFuncs) {
   this.data = data;
   this.firstYear = startYear;
   this.statFuncs = statFuncs;
@@ -27,9 +39,45 @@ Viewer.loadData = function(data, startYear, statFuncs) {
   this.endMonth = Math.min(this.endMonth, data.length);
 
   this.draw();
-}
+},
 
-Viewer.zoom = function(event) {
+changeMode: function() {
+  this.curTimeMode = (this.curTimeMode + 1) % 3;
+  this.loadTimeChooser();
+  this.draw();
+},
+
+fieldChanged: function() {
+  function _validYear(year) {
+    return (year.length == 4) && !isNaN(year);
+  }
+
+  var startYear = $('startYear'+this.curTimeMode).value;
+  if(_validYear(startYear)) {
+    this.startMonth = (parseInt(startYear) - this.firstYear)*12;
+  }
+
+  if(this.curTimeMode == 0) {
+    var endYear = $('endYear').value;
+
+    if(_validYear(endYear)) {
+      this.endMonth = (parseInt(endYear) - this.firstYear)*12;
+    }
+  } else if(this.curTimeMode == 1) {
+    var yearCount = $('yearCount').value;
+
+    if(!isNaN(yearCount)) {
+      this.endMonth = this.startMonth + yearCount*12;
+    }
+  }
+
+  this.startMonth = Math.min(this.data.length, Math.max(0, this.startMonth));
+  this.endMonth = Math.min(this.data.length, Math.max(0, this.endMonth));
+
+  this.draw();
+},
+
+zoom: function (event) {
   var deltaFactor = (event.deltaMode == WheelEvent.DOM_DELTA_LINE) ? 20 : 1;
   var delta = event.deltaY * deltaFactor;
   var mouseX = event.clientX - this.canvas.offsetLeft;
@@ -43,9 +91,23 @@ Viewer.zoom = function(event) {
   this.startMonth = Math.max(this.startMonth,0);
   this.endMonth = Math.min(Math.max(this.endMonth,this.startMonth+10), this.data.length);
   this.draw();
-}
+},
 
-Viewer.updateStats = function() {
+updateTimeFields: function() {
+  var startYear = Math.round(this.firstYear + (this.startMonth/12));
+  var endYear = Math.round(this.firstYear + (this.endMonth/12));
+
+  $('startYear'+this.curTimeMode).value = startYear;
+  if(this.curTimeMode == 0) {
+    $('endYear').value = endYear;
+  } else if(this.curTimeMode == 1) {
+    $('yearCount').value = endYear - startYear;
+  } else if(this.curTimeMode == 2) {
+    this.endMonth = this.data.length;
+  }
+},
+
+updateStats: function () {
   var stats = $('stats');
   stats.innerHTML = '';
 
@@ -66,31 +128,28 @@ Viewer.updateStats = function() {
 
     stats.appendChild(statNode);
   };
-}
+},
 
-Viewer.calcRange = function() {
+calcRange: function () {
   this.min = Infinity;
   this.max = 0.0;
   for (var i = this.startMonth; i < this.endMonth; i++) {
     if(this.data[i]>this.max) this.max = this.data[i];
     if(this.data[i]<this.min) this.min = this.data[i];
   };
-}
+},
 
-Viewer.draw = function() {
+draw: function () {
   if(!this.data) return;
+
+  this.updateTimeFields();
 
   this.drawData();
 
-  var startYear = Math.round(this.firstYear + (this.startMonth/12));
-  var endYear = Math.round(this.firstYear + (this.endMonth/12));
-  this.ctx.font = "20pt sans-serif";
-  this.ctx.fillText(String(startYear) + " - " + String(endYear),10,30);
-
   this.updateStats();
-}
+},
 
-Viewer.drawData = function(){
+drawData: function (){
   this.calcRange();
   var ctx = this.ctx;
   var span = this.endMonth-this.startMonth;
@@ -131,3 +190,4 @@ Viewer.drawData = function(){
   };
   ctx.stroke();
 }
+};
