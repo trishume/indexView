@@ -17,6 +17,8 @@ loadCanvas: function () {
     }, false);
   }
 
+  this.graphBottom = 300;
+
   this.curTimeMode = 0;
   this.loadTimeChooser();
 
@@ -162,18 +164,34 @@ drawData: function (){
   var minSpace = 20;
   var alpha = Math.min((dx*12)/minSpace*0.7,0.7);
   if (alpha < 0.3) alpha = 0.0;
-  ctx.strokeStyle = "rgba(202,226,255,"+alpha+")";
-  ctx.lineWidth = 1;
 
-  ctx.beginPath();
+  ctx.lineWidth = 1;
+  ctx.textAlign = "center";
+  ctx.font = "10pt Arial";
+  ctx.fillStyle = "rgb(130,130,130)";
+
   for (var i = this.startMonth; i < this.endMonth; i++) {
     if (i % 12 == 0) {
       var x = (i-this.startMonth)*dx;
+      var isDecade = (i+12)%(12*10) == 0;
+
+      if(isDecade) {
+        ctx.strokeStyle = "rgb(200,200,200)";
+      } else {
+        ctx.strokeStyle = "rgba(225,225,225,"+alpha+")";
+      }
+
+      ctx.beginPath();
       ctx.moveTo(x,0);
-      ctx.lineTo(x,this.height);
+      ctx.lineTo(x,this.graphBottom);
+      ctx.stroke();
+
+      if(isDecade) {
+        var curYear = String(Math.floor(this.firstYear + i/12));
+        ctx.fillText(curYear, x, this.graphBottom + 15);
+      }
     }
   };
-  ctx.stroke();
 
   // Graph
   ctx.strokeStyle = "rgb(74,144,226)";
@@ -181,12 +199,13 @@ drawData: function (){
   ctx.lineJoin = "round";
 
   ctx.beginPath();
-  var y1 = (this.data[this.startMonth]-this.min)/(this.max-this.min)*(this.height-this.topPad);
-  ctx.moveTo(0,this.height - y1);
+  var graphHeight = this.graphBottom - this.topPad;
+  var y1 = (this.data[this.startMonth]-this.min)/(this.max-this.min)*graphHeight;
+  ctx.moveTo(0,this.graphBottom - y1);
   for (var i = this.startMonth; i < this.endMonth; i+=jump) {
-    var y = (this.data[i]-this.min)/(this.max-this.min)*(this.height-this.topPad);
+    var y = (this.data[i]-this.min)/(this.max-this.min)*graphHeight;
     var x = (i-this.startMonth)*dx;
-    ctx.lineTo(x,this.height - y);
+    ctx.lineTo(x,this.graphBottom - y);
   };
   ctx.stroke();
 }

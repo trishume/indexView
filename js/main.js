@@ -2,6 +2,14 @@ var Stats = {
   _calcTotalGrowth: function(data, start, end) {
     return data[end-1]/data[start];
   },
+  _calcAverage: function(data, start, end) {
+    var total = 0;
+    for (var i = start; i < end; i++) {
+      total += data[i];
+    }
+    var average = total / (end-start);
+    return average;
+  },
   totalGrowth: function(data, start, end) {
     var totalGrowth = Stats._calcTotalGrowth(data,start,end);
     var text = String(((totalGrowth-1)*100).toFixed(2)) + '%';
@@ -10,7 +18,7 @@ var Stats = {
   dollarsNow: function(data, start, end) {
     var totalGrowth = Stats._calcTotalGrowth(data,start,end);
     var text = "$" + totalGrowth.formatMoney(2,'.',',');
-    return ["One Dollar Becomes", text];
+    return ["$1 Becomes", text];
   },
   averageGrowth: function(data, start, end) {
     var totalGrowth = Stats._calcTotalGrowth(data,start,end);
@@ -24,13 +32,14 @@ var Stats = {
     var text = String(doubled.toFixed(2));
     return ["Times Doubled", text];
   },
-  average: function(data, start, end) {
-    var total = 0;
-    for (var i = start; i < end; i++) {
-      total += data[i];
-    }
-    var average = total / (end-start);
+  averagePercent: function(data, start, end) {
+    var average = Stats._calcAverage(data, start, end);
     var text = String((average*100).toFixed(2)) + '%';
+    return ["Average", text];
+  },
+  average: function(data, start, end) {
+    var average = Stats._calcAverage(data, start, end);
+    var text = String(average.toFixed(2));
     return ["Average", text];
   }
 };
@@ -90,14 +99,47 @@ var dataSets = [
   },
   {
     name: "S&P500 Dividend Yield",
-    notes: "Historical S&P500 data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>.",
+    notes: "Yearly dividend as a percentage of price. Historical S&P500 data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>.",
     file: "shiller_absolute.json",
-    statFuncs: [Stats.average],
+    statFuncs: [Stats.averagePercent],
     startYear: function(struct) {return struct["start"];},
     datFunc: function(struct) {
       var newData = [];
       for (var i = 0; i < struct["price"].length; i++) {
         newData[i] = struct["dividend"][i]/struct["price"][i];
+      }
+      return newData;
+    }
+  },
+  {
+    name: "Shiller P/E10 Ratio",
+    notes: "Inflation adjusted price per dollar of average earnings over past 10 years. Historical S&P500 data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>.",
+    file: "shiller_real.json",
+    statFuncs: [Stats.average],
+    startYear: function(struct) {return struct["start"]+10;},
+    datFunc: function(struct) {
+      var newData = [];
+      var numPrev = 10*12;
+      for (var i = numPrev-1; i < struct["earnings"].length; i++) {
+        var total = 0;
+        for (var j = 0; j < numPrev; j++) {
+          total += struct["earnings"][i-j];
+        }
+        newData[i-numPrev] = struct["price"][i]/(total/numPrev);
+      }
+      return newData;
+    }
+  },
+  {
+    name: "S&P500 P/E Ratio",
+    notes: "Inflation adjusted price per dollar of adjusted earnings. Historical S&P500 data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>.",
+    file: "shiller_real.json",
+    statFuncs: [Stats.average],
+    startYear: function(struct) {return struct["start"];},
+    datFunc: function(struct) {
+      var newData = [];
+      for (var i = 0; i < struct["earnings"].length; i++) {
+        newData[i] = struct["price"][i]/struct["earnings"][i];
       }
       return newData;
     }
