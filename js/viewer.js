@@ -33,12 +33,12 @@ loadTimeChooser: function() {
   }
 },
 
-loadData: function (data, startYear, statFuncs) {
-  this.data = data;
-  this.firstYear = startYear;
-  this.statFuncs = statFuncs;
+loadData: function (data) {
+  this.mainData = data;
+  this.maxMonth = data.vals.length;
+  this.firstYear = data.firstYear;
 
-  this.endMonth = Math.min(this.endMonth, data.length);
+  this.endMonth = Math.min(this.endMonth, this.maxMonth);
 
   this.draw();
 },
@@ -73,8 +73,8 @@ fieldChanged: function() {
     }
   }
 
-  this.startMonth = Math.min(this.data.length, Math.max(0, this.startMonth));
-  this.endMonth = Math.min(this.data.length, Math.max(0, this.endMonth));
+  this.startMonth = Math.min(this.maxMonth, Math.max(0, this.startMonth));
+  this.endMonth = Math.min(this.maxMonth, Math.max(0, this.endMonth));
 
   this.draw();
 },
@@ -91,7 +91,7 @@ zoom: function (event) {
   this.startMonth = Math.round(factor*this.startMonth + centerMonth*(1 - factor));
 
   this.startMonth = Math.max(this.startMonth,0);
-  this.endMonth = Math.min(Math.max(this.endMonth,this.startMonth+10), this.data.length);
+  this.endMonth = Math.min(Math.max(this.endMonth,this.startMonth+10), this.maxMonth);
   this.draw();
 },
 
@@ -105,16 +105,16 @@ updateTimeFields: function() {
   } else if(this.curTimeMode == 1) {
     $('yearCount').value = endYear - startYear;
   } else if(this.curTimeMode == 2) {
-    this.endMonth = this.data.length;
+    this.endMonth = this.maxMonth;
   }
 },
 
-updateStats: function () {
+updateStats: function (data) {
   var stats = $('stats');
   stats.innerHTML = '';
 
-  for (var i = 0; i < this.statFuncs.length; i++) {
-    var result = this.statFuncs[i](this.data, this.startMonth, this.endMonth);
+  for (var i = 0; i < data.statFuncs.length; i++) {
+    var result = data.statFuncs[i](data.vals, this.startMonth, this.endMonth);
 
     var title = document.createElement("strong");
     title.appendChild(document.createTextNode(result[0]));
@@ -132,35 +132,33 @@ updateStats: function () {
   };
 },
 
-calcRange: function () {
-  this.min = Infinity;
-  this.max = 0.0;
+calcRange: function (data) {
+  data.min = Infinity;
+  data.max = 0.0;
   for (var i = this.startMonth; i < this.endMonth; i++) {
-    if(this.data[i]>this.max) this.max = this.data[i];
-    if(this.data[i]<this.min) this.min = this.data[i];
+    if(data.vals[i]>data.max) data.max = data.vals[i];
+    if(data.vals[i]<data.min) data.min = data.vals[i];
   };
 },
 
 draw: function () {
-  if(!this.data) return;
+  if(!this.mainData) return;
+  this.ctx.clearRect(0,0,this.width, this.height);
 
   this.updateTimeFields();
 
-  this.drawData();
+  this.drawLines();
+  this.calcRange(this.mainData);
+  this.drawData(this.mainData);
 
-  this.updateStats();
+  this.updateStats(this.mainData);
 },
 
-drawData: function (){
-  this.calcRange();
+drawLines: function(){
   var ctx = this.ctx;
   var span = this.endMonth-this.startMonth;
   var dx = (this.width/span);
-  var jump = Math.ceil(span/this.width);
 
-  ctx.clearRect(0,0,this.width, this.height);
-
-  // Year lines
   var minSpace = 20;
   var alpha = Math.min((dx*12)/minSpace*0.7,0.7);
   if (alpha < 0.3) alpha = 0.0;
@@ -191,7 +189,14 @@ drawData: function (){
         ctx.fillText(curYear, x, this.graphBottom + 15);
       }
     }
-  };
+  }
+},
+
+drawData: function (data){
+  var ctx = this.ctx;
+  var span = this.endMonth-this.startMonth;
+  var dx = (this.width/span);
+  var jump = Math.ceil(span/this.width);
 
   // Graph
   ctx.strokeStyle = "rgb(74,144,226)";
@@ -200,10 +205,10 @@ drawData: function (){
 
   ctx.beginPath();
   var graphHeight = this.graphBottom - this.topPad;
-  var y1 = (this.data[this.startMonth]-this.min)/(this.max-this.min)*graphHeight;
+  var y1 = (data.vals[this.startMonth]-data.min)/(data.max-data.min)*graphHeight;
   ctx.moveTo(0,this.graphBottom - y1);
   for (var i = this.startMonth; i < this.endMonth; i+=jump) {
-    var y = (this.data[i]-this.min)/(this.max-this.min)*graphHeight;
+    var y = (data.vals[i]-data.min)/(data.max-data.min)*graphHeight;
     var x = (i-this.startMonth)*dx;
     ctx.lineTo(x,this.graphBottom - y);
   };
