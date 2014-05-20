@@ -26,6 +26,12 @@ var Stats = {
     var text = String((avgGrowth*100).toFixed(2)) + '%';
     return ["Average Growth", text];
   },
+  averageGrowthQuarterly: function(data, start, end) {
+    var totalGrowth = Stats._calcTotalGrowth(data,start,end);
+    var avgGrowth = Math.pow(totalGrowth,(12/((end-start)*3)))-1;
+    var text = String((avgGrowth*100).toFixed(2)) + '%';
+    return ["Average Growth", text];
+  },
   timesDoubled: function(data, start, end) {
     var totalGrowth = Stats._calcTotalGrowth(data,start,end);
     var doubled = Math.log(totalGrowth)/Math.log(2);
@@ -39,7 +45,7 @@ var Stats = {
   },
   average: function(data, start, end) {
     var average = Stats._calcAverage(data, start, end);
-    var text = String(average.toFixed(2));
+    var text = average.formatMoney(2,'.',',');
     return ["Average", text];
   }
 };

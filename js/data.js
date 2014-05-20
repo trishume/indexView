@@ -83,6 +83,54 @@ var dataSets = [
       return newData;
     }
   },
+  {
+    name: "Shiller Home Price Index",
+    notes: "Index that approxmately tracks the price of housing, adjusted for inflation. Data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>.",
+    file: "shiller_housing.json",
+    pointJump: 3, // Quarterly data
+    statFuncs: [Stats.totalGrowth, Stats.averageGrowthQuarterly, Stats.dollarsNow, Stats.timesDoubled],
+    startYear: function(struct) {return struct["start"];},
+    datFunc: function(struct) {
+      return struct["price"];
+    }
+  },
+  {
+    name: "Shiller Building Cost Index",
+    notes: "Index that approxmately tracks the cost of building, adjusted for inflation. Data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>.",
+    file: "shiller_housing.json",
+    pointJump: 12, // Yearly
+    statFuncs: [Stats.totalGrowth, Stats.timesDoubled, Stats.average],
+    startYear: function(struct) {return struct["start"];},
+    datFunc: function(struct) {
+      return struct["building"];
+    }
+  },
+  {
+    name: "Long Term Borrowing Rate",
+    notes: "Interest rate for long term loans. Data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>.",
+    file: "shiller_housing.json",
+    pointJump: 12, // Yearly
+    statFuncs: [Stats.average],
+    startYear: function(struct) {return struct["start"];},
+    datFunc: function(struct) {
+      return struct["longRate"];
+    }
+  },
+  {
+    name: "U.S Population",
+    notes: "U.S Population in millions. Data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>.",
+    file: "shiller_housing.json",
+    pointJump: 12, // Yearly
+    statFuncs: [Stats.totalGrowth, Stats.timesDoubled, Stats.average],
+    startYear: function(struct) {return struct["start"];},
+    datFunc: function(struct) {
+      var newData = [];
+      for (var i = 0; i < struct["population"].length; i++) {
+        newData[i] = struct["population"][i]*1000000;
+      }
+      return newData;
+    }
+  },
 ];
 var dataFileCache = {};
 
@@ -117,5 +165,15 @@ function loadDataFile(fileName) {
   } else {
     alert("Failed to get "+fileName);
     return null;
+  }
+}
+
+function getDataSetStruct(set) {
+  var struct = loadDataFile(set.file);
+  return {
+    vals: set.datFunc(struct),
+    firstYear: set.startYear(struct),
+    statFuncs: set.statFuncs,
+    pointJump: (set.pointJump || 1)
   }
 }

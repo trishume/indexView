@@ -15,12 +15,7 @@ function setChooserChanged() {
 
 function loadData(setNum) {
   var set = dataSets[setNum];
-  var struct = loadDataFile(set.file);
-  var data = {
-    vals: set.datFunc(struct),
-    firstYear: set.startYear(struct),
-    statFuncs: set.statFuncs
-  }
+  var data = getDataSetStruct(set);
 
   $('dataset-notes').innerHTML = set.notes;
 
