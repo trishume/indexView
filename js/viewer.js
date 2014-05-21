@@ -13,10 +13,20 @@ loadCanvas: function () {
         return false;
     }, false);
 
-    // var _trace = this.trace.bind(this);
-    // this.canvas.addEventListener('mousemove', function (e) {
-    //     _trace(e.clientX);
-    // }, false);
+    var _mouse = this.mouse.bind(this);
+    this.canvas.addEventListener('mousemove', function (e) {
+        _mouse(e);
+    }, false);
+
+    var _this = this;
+    this.mouseDown = false;
+    this.canvas.addEventListener('mousedown', function (e) {
+      _this.mouseDown = true;
+    }, false);
+    this.canvas.addEventListener('mouseup', function (e) {
+      _this.mouseDown = false;
+    }, false);
+
   }
 
   this.bigGraph = {
@@ -110,10 +120,22 @@ fieldChanged: function() {
     }
   }
 
-  this.startMonth = Math.min(this.maxMonth, Math.max(0, this.startMonth));
-  this.endMonth = Math.min(this.maxMonth, Math.max(0, this.endMonth));
+  this.clampTimespan();
 
   this.draw();
+},
+
+clampTimespan: function() {
+  this.startMonth = Math.min(Math.max(this.startMonth,0), this.maxMonth);
+  this.endMonth   = Math.min(Math.max(this.endMonth,this.startMonth+12), this.maxMonth);
+},
+
+mouse: function(event) {
+  var y = event.clientY - this.canvas.offsetTop - this.canvas.offsetParent.offsetTop;
+  var x = event.clientX - this.canvas.offsetParent.offsetLeft;
+  if(y > this.scrubGraph.top && this.mouseDown) {
+    this.scrub(x);
+  }
 },
 
 zoom: function (event) {
@@ -127,8 +149,7 @@ zoom: function (event) {
   this.endMonth = Math.round(factor*this.endMonth - centerMonth*(factor - 1));
   this.startMonth = Math.round(factor*this.startMonth + centerMonth*(1 - factor));
 
-  this.startMonth = Math.max(this.startMonth,0);
-  this.endMonth = Math.min(Math.max(this.endMonth,this.startMonth+12), this.maxMonth);
+  this.clampTimespan();
   this.draw();
 },
 
@@ -148,6 +169,17 @@ trace: function(x) {
   ctx.moveTo(x,0);
   ctx.lineTo(x,this.graphBottom);
   ctx.stroke();
+},
+
+scrub: function(x) {
+  var span = this.endMonth - this.startMonth;
+  var target = Math.round(x/this.width*this.maxMonth);
+  var half = Math.floor(span/2);
+  this.startMonth = target - half;
+  this.endMonth = target + half;
+
+  this.clampTimespan();
+  this.draw();
 },
 
 updateTimeFields: function() {
@@ -236,7 +268,7 @@ drawLines: function(opt, startMonth, endMonth){
 
   var minSpace = 20;
   var alpha = Math.min((dx*12)/minSpace*0.7,0.7);
-  if (alpha < 0.3 || !opt.yearLabels) alpha = 0.0;
+  if (alpha < 0.3 || !opt.yearLines) alpha = 0.0;
 
   ctx.lineWidth = 1;
   ctx.textAlign = "center";
@@ -290,11 +322,6 @@ drawData: function (data, opt, startMonth, endMonth){
     ctx.lineTo(x,opt.bottom - y);
   };
   ctx.stroke();
-},
-
-drawSep: function(opt) {
-  var ctx = this.ctx;
-  ctx.lineWidth = 6;
 },
 
 drawWindow: function(opt) {
