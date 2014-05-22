@@ -33,7 +33,6 @@ loadCanvas: function () {
     top: 20,
     bottom: 240,
     width: this.width,
-    color: "rgb(74,144,226)",
     lineWidth: 4,
     lineTop: 0,
     decadeLabels: true,
@@ -44,7 +43,6 @@ loadCanvas: function () {
     top: 270,
     bottom: 300,
     width: this.width,
-    color: "rgb(74,144,226)",
     lineWidth: 2,
     windowColor: "rgba(100,100,100,0.2)",
     lineTop: 290,
@@ -57,6 +55,8 @@ loadCanvas: function () {
 
   this.startMonth = 1200;
   this.endMonth = Infinity;
+
+  this.data = [];
 },
 
 loadTimeChooser: function() {
@@ -67,10 +67,15 @@ loadTimeChooser: function() {
 },
 
 loadData: function (data) {
-  this.mainData = data;
+  this.data[0] = data;
   this.maxMonth = data.vals.length * data.pointJump;
 
-  // What if we zoom to 1870 and then switch to a set starting in 1890
+  data.color = "rgb(74,144,226)";
+  data.startOffset = 0;
+  data.widthMultiple = 1.0;
+  data.fullRange = this.calcRange(data, 0, this.maxMonth);
+
+  // What if we zoom to 1890 and then switch to a set starting in 1870
   if(this.firstYear && data.firstYear != this.firstYear) {
     var delta = (this.firstYear - data.firstYear)*12;
     this.startMonth += delta;
@@ -82,12 +87,26 @@ loadData: function (data) {
   this.firstYear = data.firstYear;
   this.endMonth = Math.min(this.endMonth, this.maxMonth);
 
-  // global maxes and mins
-  var range = this.calcRange(this.mainData, 0, this.maxMonth);
-  this.scrubGraph.min = range[0];
-  this.scrubGraph.max = range[1];
+  this.clearOverlay();
+
 
   this.draw();
+},
+
+loadOverlay: function(data) {
+  this.data[1] = data;
+  data.color = "rgb(200,200,200)";
+  data.startOffset = (data.firstYear - this.firstYear) * 12;
+  data.fullRange = this.calcRange(data, 0, data.vals.length);
+  data.widthMultiple = 0.6;
+  this.draw();
+},
+
+clearOverlay: function() {
+  if(this.data.length > 1) {
+    this.data.pop();
+    this.draw();
+  }
 },
 
 changeMode: function() {
@@ -222,6 +241,7 @@ updateStats: function (data) {
 },
 
 toIndex: function (data,n) {
+  n = n - data.startOffset;
   return Math.floor(n/data.pointJump);
 },
 
@@ -232,33 +252,41 @@ calcRange: function (data, start, end) {
     if(data.vals[i]>max) max = data.vals[i];
     if(data.vals[i]<min) min = data.vals[i];
   };
-  return [min, max];
+  return {"min": min, "max": max};
 },
 
-calcCurRange: function (data, opt) {
-  var start = this.toIndex(data, this.startMonth);
-  var end = this.toIndex(data, this.endMonth);
-  var res = this.calcRange(data, start, end);
-  opt.min = res[0];
-  opt.max = res[1];
+calcRanges: function () {
+  var ranges = [];
+  for (var i = 0; i < this.data.length; i++) {
+    var data = this.data[i];
+    var start = this.toIndex(data, this.startMonth);
+    var end = this.toIndex(data, this.endMonth);
+    ranges[i] = this.calcRange(data, start, end);
+  };
+  return ranges;
 },
 
 draw: function () {
-  if(!this.mainData) return;
+  if(this.data.length == 0) return;
   this.ctx.clearRect(0,0,this.width, this.height);
 
   this.updateTimeFields();
 
+  var ranges = this.calcRanges();
+
   this.drawLines(this.bigGraph, this.startMonth, this.endMonth);
-  this.calcCurRange(this.mainData, this.bigGraph);
-  this.drawData(this.mainData, this.bigGraph, this.startMonth, this.endMonth);
+  for (var i = this.data.length - 1; i >= 0; i--) {
+    this.drawData(this.data[i], this.bigGraph, this.startMonth, this.endMonth, ranges[i]);
+  };
 
   // scrub graph
   //this.drawLines(this.scrubGraph, 0, this.maxMonth);
-  this.drawData(this.mainData, this.scrubGraph, 0, this.maxMonth);
+  for (var i = this.data.length - 1; i >= 0; i--) {
+    this.drawData(this.data[i], this.scrubGraph, 0, this.maxMonth, this.data[i].fullRange);
+  };
   this.drawWindow(this.scrubGraph);
 
-  this.updateStats(this.mainData);
+  this.updateStats(this.data[0]);
 },
 
 drawLines: function(opt, startMonth, endMonth){
@@ -299,7 +327,7 @@ drawLines: function(opt, startMonth, endMonth){
   }
 },
 
-drawData: function (data, opt, startMonth, endMonth){
+drawData: function (data, opt, startMonth, endMonth, rng){
   var ctx = this.ctx;
   var start = this.toIndex(data, startMonth);
   var end = this.toIndex(data, endMonth);
@@ -308,16 +336,16 @@ drawData: function (data, opt, startMonth, endMonth){
   var jump = (data.pointJump == 1) ? Math.ceil(span/opt.width) : 1;
 
   // Graph
-  ctx.strokeStyle = opt.color;
-  ctx.lineWidth = opt.lineWidth;
+  ctx.strokeStyle = data.color;
+  ctx.lineWidth = opt.lineWidth * data.widthMultiple;
   ctx.lineJoin = "round";
 
   ctx.beginPath();
   var graphHeight = opt.bottom - opt.top;
-  var y1 = (data.vals[start]-opt.min)/(opt.max-opt.min)*graphHeight;
+  var y1 = (data.vals[start]-rng.min)/(rng.max-rng.min)*graphHeight;
   ctx.moveTo(0,opt.bottom - y1);
   for (var i = start; i < end; i+=jump) {
-    var y = (data.vals[i]-opt.min)/(opt.max-opt.min)*graphHeight;
+    var y = (data.vals[i]-rng.min)/(rng.max-rng.min)*graphHeight;
     var x = (i-start)*dx;
     ctx.lineTo(x,opt.bottom - y);
   };
