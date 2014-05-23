@@ -1,63 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>S&P Viewer</title>
-  <script type="text/javascript" src="datasets/shiller_absolute.json"></script>
+  <title>S&amp;P Viewer</title>
+  <link href="main.css" rel="stylesheet">
   <script type="text/javascript" src="js/lib.js"></script>
   <script type="text/javascript" src="js/viewer.js"></script>
+  <script type="text/javascript" src="js/stats.js"></script>
+  <script type="text/javascript" src="js/data.js"></script>
   <script type="text/javascript" src="js/main.js"></script>
-  <style type="text/css">
-    body {
-      font-family: sans-serif;
-    }
-
-    #widget {
-      /*border: 2px solid #4A90E2;*/
-    }
-
-    #graph {
-      /*border: 1px solid black;*/
-      float: left;
-    }
-    #stats {
-      float: left;
-      padding-left: 1em;
-      width: 200px;
-      text-align: right;
-    }
-
-    #stats strong {
-      font-weight: normal;
-      font-size: 15pt;
-    }
-
-    #stats .num {
-      font-size: 15pt;
-      color: blue;
-    }
-
-    .sep {
-      clear: both;
-      height: 10px;
-    }
-  </style>
 </head>
 <body onload="load();">
-  <h1>S&amp;P 500 Index</h1>
+  <div id="datasets">
+    <select name="datasets" id="dataset-chooser" onchange="setChooserChanged()" class="titleSet"></select>
+    <div id="overlay-form">
+      <strong>Overlay: </strong>
+      <select name="overlays" id="overlay-chooser" onchange="overlayChanged()">
+      </select>
+    </div>
+    <div class="clear"></div>
+  </div>
   <div id="widget">
-    <canvas id="graph" width="500" height="250"></canvas>
+    <div class="time">
+      <div id="time-mode-0">
+        <input type="text" id="startYear0" onchange="Viewer.fieldChanged()">
+        <a href="#" onclick="Viewer.changeMode()" class="modeChange">to</a>
+        <input type="text" id="endYear" onchange="Viewer.fieldChanged()">
+      </div>
+      <div id="time-mode-1">
+        <input type="text" id="startYear1" onchange="Viewer.fieldChanged()">
+        <a href="#" onclick="Viewer.changeMode()" class="modeChange">for years:</a>&nbsp;
+        <input type="text" id="yearCount" onchange="Viewer.fieldChanged()">
+      </div>
+      <div id="time-mode-2">
+        <input type="text" id="startYear2" onchange="Viewer.fieldChanged()">
+        <a href="#" onclick="Viewer.changeMode()" class="modeChange">to present</a>
+      </div>
+    </div>
+    <canvas id="graph" width="625" height="300"></canvas>
     <div id="stats">
     </div>
     <div class="sep"></div>
   </div>
-  <div id="datasets">
-    <strong>Data Set: </strong>
-    <select name="datasets" id="dataset-chooser" onchange="setChooserChanged()">
-    </select>
+
+  <div class="notes">
+    <strong>Notes: </strong>
+    <span id="dataset-notes"></span>
   </div>
-
-
-  <h3>Note:</h3>
-  <p>Scroll to zoom and move around. Better date entry coming soon.</p>
+  <div id="footer">
+    <small>Created by <a href="http://thume.ca/">Tristan Hume</a></small>
 </body>
 </html>
