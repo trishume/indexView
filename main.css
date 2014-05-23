@@ -1,0 +1,129 @@
+body {
+  font-family: sans-serif;
+}
+
+#widget {
+  position: relative;
+  margin-top: 10px;
+  width: 798px;
+  padding: 5px;
+
+  border-color: rgb(189, 195, 199);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 6px;
+}
+
+#graph {
+  float: left;
+  z-index: -1;
+}
+#stats {
+  float: left;
+  padding-left: 10px;
+  width: 150px;
+  text-align: right;
+}
+
+#stats strong {
+  font-weight: normal;
+  font-size: 15pt;
+}
+
+#stats .num {
+  font-size: 15pt;
+  color: rgb(70, 145, 231);
+}
+
+.clear {
+  clear: both;
+}
+
+.sep {
+  clear: both;
+  height: 15px;
+}
+
+.modeChange {
+  color: blue;
+  font-size: 18pt;
+}
+.modeChange:visited {
+  color: blue;
+}
+
+.time {
+  float:left;
+  position: absolute;
+  top: 15px;
+  font-size: 20pt;
+  z-index: 500;
+}
+
+.time input {
+  border-color: rgb(189, 195, 199);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 6px;
+  box-sizing: border-box;
+  color: rgb(52, 73, 94);
+  font-size: 18pt;
+  height: 40px;
+  line-height: 22.0049991607666px;
+  padding-bottom: 8px;
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-top: 8px;
+  width: 90px;
+  text-align: center;
+}
+
+select {
+  -webkit-appearance: none !important;
+  background-color: #fafafa;
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iM3B4IiB2aWV3Qm94PSIwIDAgNiAzIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCA2IDMiIHhtbDpzcGFjZT0icHJlc2VydmUiPjxwb2x5Z29uIHBvaW50cz0iNS45OTIsMCAyLjk5MiwzIC0wLjAwOCwwICIvPjwvc3ZnPg==');
+  background-repeat: no-repeat;
+  background-position: 97% center;
+
+  border: 1px solid #cccccc;
+  padding: 0.2rem;
+  font-size: 12pt;
+  color: rgba(0, 0, 0, 0.75);
+  line-height: normal;
+  border-radius: 5;
+  height: 35px;
+  margin: 0px;
+}
+
+select.radius {
+    border-radius: 3px;
+}
+select:hover {
+    /*background-color: #f3f3f3;*/
+    border-color: #999999;
+}
+
+select.titleSet {
+  font-size: 14pt;
+  font-weight: bold;
+  float: left;
+  /*margin-bottom: 8px;*/
+  width: 500px;
+}
+
+#overlay-form {
+  float: right;
+}
+
+#datasets {
+  width: 810px;
+}
+
+.notes {
+  padding-top: 10px;
+  clear: both;
+}
+
+#footer {
+  margin-top: 10px;
+}

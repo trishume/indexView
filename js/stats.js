@@ -12,7 +12,7 @@ var Stats = {
   },
   totalGrowth: function(data, start, end) {
     var totalGrowth = Stats._calcTotalGrowth(data,start,end);
-    var text = String(((totalGrowth-1)*100).toFixed(2)) + '%';
+    var text = String(((totalGrowth-1)*100).formatMoney(2,'.',',')) + '%';
     return ["Total Growth", text];
   },
   dollarsNow: function(data, start, end) {

@@ -1,7 +1,7 @@
 var defaultStats = [Stats.totalGrowth, Stats.averageGrowth, Stats.dollarsNow, Stats.timesDoubled];
 var dataSets = [
   {
-    name: "S&P500 (Reinvested Dividends)",
+    name: "S&P500 (With Dividends)",
     notes: "Historical S&P500 data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>. Not inflation adjusted. Includes reinvested dividends.",
     file: "shiller_absolute.json",
     group: "s&pIndex",
@@ -22,7 +22,7 @@ var dataSets = [
     }
   },
   {
-    name: "Inflation adjusted S&P500 (Reinvested Dividends)",
+    name: "Real S&P500 (With Dividends)",
     notes: "Historical S&P500 data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>. Not inflation adjusted. Includes reinvested dividends.",
     file: "shiller_real.json",
     group: "s&pIndex",

@@ -10,6 +10,7 @@ function loadSetChooser(select, sets) {
 
 function setChooserChanged() {
   var select = $('dataset-chooser');
+  select.blur();
   loadData(select.selectedIndex);
 }
 

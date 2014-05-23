@@ -2,86 +2,23 @@
 <html>
 <head>
   <title>S&amp;P Viewer</title>
+  <link href="main.css" rel="stylesheet">
   <script type="text/javascript" src="js/lib.js"></script>
   <script type="text/javascript" src="js/viewer.js"></script>
   <script type="text/javascript" src="js/stats.js"></script>
   <script type="text/javascript" src="js/data.js"></script>
   <script type="text/javascript" src="js/main.js"></script>
-  <style type="text/css">
-    body {
-      font-family: sans-serif;
-    }
-
-    #widget {
-      position: relative;
-    }
-
-    #graph {
-      float: left;
-      z-index: -1;
-    }
-    #stats {
-      float: left;
-      padding-left: 1em;
-      width: 150px;
-      text-align: right;
-    }
-
-    #stats strong {
-      font-weight: normal;
-      font-size: 15pt;
-    }
-
-    #stats .num {
-      font-size: 15pt;
-      color: blue;
-    }
-
-    .sep {
-      clear: both;
-      height: 15px;
-    }
-
-    .time {
-      float:left;
-      position: absolute;
-      top: 15px;
-      font-size: 20pt;
-      z-index: 500;
-    }
-
-    .time input {
-      border-color: rgb(189, 195, 199);
-      border-width: 2px;
-      border-style: solid;
-      border-radius: 6px;
-      box-sizing: border-box;
-      color: rgb(52, 73, 94);
-      font-size: 20pt;
-      height: 42px;
-      line-height: 22.0049991607666px;
-      padding-bottom: 8px;
-      padding-left: 12px;
-      padding-right: 12px;
-      padding-top: 8px;
-      width: 100px;
-    }
-
-    .modeChange {
-      color: blue;
-      font-size: 22pt;
-    }
-    .modeChange:visited {
-      color: blue;
-    }
-
-    #footer {
-      margin-top: 10px;
-    }
-  </style>
 </head>
 <body onload="load();">
-  <h1>S&amp;P 500 Index</h1>
+  <div id="datasets">
+    <select name="datasets" id="dataset-chooser" onchange="setChooserChanged()" class="titleSet"></select>
+    <div id="overlay-form">
+      <strong>Overlay: </strong>
+      <select name="overlays" id="overlay-chooser" onchange="overlayChanged()">
+      </select>
+    </div>
+    <div class="clear"></div>
+  </div>
   <div id="widget">
     <div class="time">
       <div id="time-mode-0">
@@ -99,19 +36,13 @@
         <a href="#" onclick="Viewer.changeMode()" class="modeChange">to present</a>
       </div>
     </div>
-    <canvas id="graph" width="650" height="320"></canvas>
+    <canvas id="graph" width="625" height="300"></canvas>
     <div id="stats">
     </div>
     <div class="sep"></div>
   </div>
-  <div id="datasets">
-    <strong>Data Set: </strong>
-    <select name="datasets" id="dataset-chooser" onchange="setChooserChanged()">
-    </select>
-    <strong>Overlay: </strong>
-    <select name="overlays" id="overlay-chooser" onchange="overlayChanged()">
-    </select>
-    <br>
+
+  <div class="notes">
     <strong>Notes: </strong>
     <span id="dataset-notes"></span>
   </div>
