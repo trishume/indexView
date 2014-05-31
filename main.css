@@ -68,14 +68,40 @@ body {
   box-sizing: border-box;
   color: rgb(52, 73, 94);
   font-size: 18pt;
-  height: 40px;
+  height: 37px;
   line-height: 22.0049991607666px;
   padding-bottom: 8px;
   padding-left: 12px;
   padding-right: 12px;
   padding-top: 8px;
-  width: 90px;
+  width: 80px;
   text-align: center;
+}
+
+.date-entry {
+  position: relative;
+}
+
+.date-entry .time-field {
+  width: 100px;
+}
+
+.date-months {
+  font-size: 9pt;
+  position: absolute;
+  width: 100px;
+  text-align: center;
+  left: 0px;
+  top: 37px;
+}
+
+.date-months a {
+  text-decoration: none;
+  color: rgb(194, 194, 194);
+}
+
+.date-months .cur-month {
+  color: rgb(235, 132, 132);
 }
 
 select {
