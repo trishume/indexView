@@ -51,12 +51,21 @@ loadCanvas: function () {
   };
 
   this.curTimeMode = 0;
+  this.loadDateFields();
   this.loadTimeChooser();
 
   this.startMonth = 1200;
   this.endMonth = Infinity;
 
   this.data = [];
+},
+
+loadDateFields: function() {
+  this.dateFields = [];
+  for (var i = 0; i <= 3; i++) {
+    var elem = $('date-field-'+i);
+    this.dateFields[i] = new DateField(elem, this);
+  };
 },
 
 loadTimeChooser: function() {
@@ -116,20 +125,17 @@ changeMode: function() {
 },
 
 fieldChanged: function() {
-  function _validYear(year) {
-    return (year.length == 4) && !isNaN(year);
-  }
-
-  var startYear = $('startYear'+this.curTimeMode).value;
-  if(_validYear(startYear)) {
-    this.startMonth = (parseInt(startYear) - this.firstYear)*12;
+  var startField = this.dateFields[this.curTimeMode];
+  var startMonth = startField.getMonthInRange(this.firstYear, this.maxMonth);
+  if(startMonth != null) {
+    this.startMonth = startMonth;
   }
 
   if(this.curTimeMode == 0) {
-    var endYear = $('endYear').value;
+    var endMonth = this.dateFields[3].getMonthInRange(this.firstYear,this.maxMonth);
 
-    if(_validYear(endYear)) {
-      this.endMonth = (parseInt(endYear) - this.firstYear)*12;
+    if(endMonth != null) {
+      this.endMonth = endMonth;
     }
   } else if(this.curTimeMode == 1) {
     var yearCount = $('yearCount').value;
@@ -205,9 +211,9 @@ updateTimeFields: function() {
   var startYear = Math.round(this.firstYear + (this.startMonth/12));
   var endYear = Math.round(this.firstYear + (this.endMonth/12));
 
-  $('startYear'+this.curTimeMode).value = startYear;
+  this.dateFields[this.curTimeMode].setDateFrom(this.startMonth, this.firstYear);
   if(this.curTimeMode == 0) {
-    $('endYear').value = endYear;
+    this.dateFields[3].setDateFrom(this.endMonth, this.firstYear);
   } else if(this.curTimeMode == 1) {
     $('yearCount').value = endYear - startYear;
   } else if(this.curTimeMode == 2) {
