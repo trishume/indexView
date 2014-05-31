@@ -60,7 +60,7 @@ body {
   z-index: 500;
 }
 
-.time input {
+.time-field {
   border-color: rgb(189, 195, 199);
   border-width: 1px;
   border-style: solid;
