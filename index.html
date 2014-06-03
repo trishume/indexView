@@ -7,6 +7,7 @@
   <script type="text/javascript" src="js/viewer.js"></script>
   <script type="text/javascript" src="js/stats.js"></script>
   <script type="text/javascript" src="js/data.js"></script>
+  <script type="text/javascript" src="js/dateField.js"></script>
   <script type="text/javascript" src="js/main.js"></script>
 </head>
 <body onload="load();">
@@ -21,20 +22,20 @@
   </div>
   <div id="widget">
     <div class="time">
-      <div id="time-mode-0">
-        <input type="text" id="startYear0" onchange="Viewer.fieldChanged()">
+      <span id="time-mode-0">
+        <span id="date-field-0"></span>
         <a href="#" onclick="Viewer.changeMode()" class="modeChange">to</a>
-        <input type="text" id="endYear" onchange="Viewer.fieldChanged()">
-      </div>
-      <div id="time-mode-1">
-        <input type="text" id="startYear1" onchange="Viewer.fieldChanged()">
+        <span id="date-field-3"></span>
+      </span>
+      <span id="time-mode-1">
+        <span id="date-field-1"></span>
         <a href="#" onclick="Viewer.changeMode()" class="modeChange">for years:</a>&nbsp;
-        <input type="text" id="yearCount" onchange="Viewer.fieldChanged()">
-      </div>
-      <div id="time-mode-2">
-        <input type="text" id="startYear2" onchange="Viewer.fieldChanged()">
+        <input type="text" id="yearCount" onchange="Viewer.fieldChanged()" class="time-field">
+      </span>
+      <span id="time-mode-2">
+        <span id="date-field-2"></span>
         <a href="#" onclick="Viewer.changeMode()" class="modeChange">to present</a>
-      </div>
+      </span>
     </div>
     <canvas id="graph" width="625" height="300"></canvas>
     <div id="stats">
