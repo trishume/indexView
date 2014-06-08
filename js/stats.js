@@ -24,7 +24,8 @@ var Stats = {
       var text = "$" + totalGrowth.formatMoney(2,'.',',');
       return text;
     },
-    name: "$1 Becomes"
+    name: "$1 Becomes",
+    description: "If $1 was invested at the beginning of this time period, what would it be by the end?"
   },
   averageGrowth: {
     calc: function(data, start, end) {
@@ -33,7 +34,8 @@ var Stats = {
       var text = String((avgGrowth*100).toFixed(2)) + '%';
       return text;
     },
-    name: "Average Growth"
+    name: "Annual Growth",
+    description: "The CAGR, defined as the rate of constant growth that would produce the same return over the given time period."
   },
   averageGrowthQuarterly: {
     calc: function(data, start, end) {
@@ -42,7 +44,8 @@ var Stats = {
       var text = String((avgGrowth*100).toFixed(2)) + '%';
       return text;
     },
-    name: "Average Growth"
+    name: "Annual Growth",
+    description: "The CAGR, defined as the rate of constant growth that would produce the same return over the given time period."
   },
   timesDoubled: {
     calc: function(data, start, end) {

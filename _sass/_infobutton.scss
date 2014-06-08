@@ -1,0 +1,88 @@
+/* Help Popover */
+
+/* The element to hover over */
+$bubble-size: 14px;
+.qs {
+  // background-color: #02bdda;
+  border: 1px solid;
+  border-radius: 16px;
+  border-color: #888888;
+
+  color: #949494;
+  cursor: default;
+  display: inline-block;
+  font-family: 'Helvetica',sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  height: $bubble-size;
+  line-height: $bubble-size;
+  position: relative;
+  text-align: center;
+  vertical-align: text-top;
+  width: $bubble-size;
+
+  margin-right: 5px;
+
+  .popover {
+    background-color: rgba(0,0,0,0.85);
+    border-radius: 5px;
+    bottom: $bubble-size + 12px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.4);
+    color: #fff;
+    display: none;
+    font-size: 12px;
+    font-family: 'Helvetica',sans-serif;
+    left: -103px;
+    padding: 7px 10px;
+    position: absolute;
+    text-align: left;
+    width: 200px;
+    z-index: 4;
+
+    &:before {
+        border-top: 7px solid rgba(0,0,0,0.85);
+        border-right: 7px solid transparent;
+        border-left: 7px solid transparent;
+        bottom: -7px;
+        content: '';
+        display: block;
+        left: 50%;
+        margin-left: -7px;
+        position: absolute;
+      }
+  }
+
+  &:hover {
+      .popover {
+        display: block;
+        -webkit-animation: fade-in .2s linear 1, move-up .2s linear 1;
+        -moz-animation: fade-in .2s linear 1, move-up .2s linear 1;
+        -ms-animation: fade-in .2s linear 1, move-up .2s linear 1;
+      }
+    }
+}
+
+@-webkit-keyframes fade-in {
+  from   { opacity: 0; }
+  to { opacity: 1; }
+}
+@-moz-keyframes fade-in {
+  from   { opacity: 0; }
+  to { opacity: 1; }
+}
+@-ms-keyframes fade-in {
+  from   { opacity: 0; }
+  to { opacity: 1; }
+}
+@-webkit-keyframes move-up {
+  from   { bottom: $bubble-size; }
+  to { bottom: $bubble-size + 12px; }
+}
+@-moz-keyframes move-up {
+  from   { bottom: $bubble-size; }
+  to { bottom: $bubble-size + 12px; }
+}
+@-ms-keyframes move-up {
+  from   { bottom: $bubble-size; }
+  to { bottom: $bubble-size + 12px; }
+}

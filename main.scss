@@ -1,3 +1,6 @@
+---
+---
+
 body {
   font-family: sans-serif;
 }
@@ -27,7 +30,7 @@ body {
 
 #stats strong {
   font-weight: normal;
-  font-size: 15pt;
+  font-size: 14pt;
 }
 
 #stats .num {
@@ -153,3 +156,5 @@ select.titleSet {
 #footer {
   margin-top: 10px;
 }
+
+@import 'infobutton'
