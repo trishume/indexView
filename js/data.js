@@ -5,7 +5,7 @@ var dataSets = [
     notes: "Historical S&P500 data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>. Not inflation adjusted. Includes reinvested dividends.",
     file: "shiller_absolute.json",
     group: "s&pIndex",
-    statFuncs: defaultStats,
+    stats: defaultStats,
     startYear: function(struct) {return struct["start"];},
     datFunc: reinvestDividends
   },
@@ -15,7 +15,7 @@ var dataSets = [
     file: "shiller_absolute.json",
     group: "s&pIndex",
     goodOverlay: true,
-    statFuncs: defaultStats,
+    stats: defaultStats,
     startYear: function(struct) {return struct["start"];},
     datFunc: function(struct) {
       return struct["price"];
@@ -26,7 +26,7 @@ var dataSets = [
     notes: "Historical S&P500 data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>. Not inflation adjusted. Includes reinvested dividends.",
     file: "shiller_real.json",
     group: "s&pIndex",
-    statFuncs: defaultStats,
+    stats: defaultStats,
     startYear: function(struct) {return struct["start"];},
     datFunc: reinvestDividends
   },
@@ -35,7 +35,7 @@ var dataSets = [
     notes: "Historical S&P500 data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>. Inflation adjusted. Dividends not reinvested.",
     file: "shiller_real.json",
     group: "s&pIndex",
-    statFuncs: defaultStats,
+    stats: defaultStats,
     startYear: function(struct) {return struct["start"];},
     datFunc: function(struct) {
       return struct["price"];
@@ -46,7 +46,7 @@ var dataSets = [
     notes: "Yearly dividend as a percentage of price. Historical S&P500 data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>.",
     file: "shiller_absolute.json",
     goodOverlay: true,
-    statFuncs: [Stats.averagePercent],
+    stats: [Stats.averagePercent],
     startYear: function(struct) {return struct["start"];},
     datFunc: function(struct) {
       var newData = [];
@@ -61,7 +61,7 @@ var dataSets = [
     notes: "Inflation adjusted price per dollar of average earnings over past 10 years. Historical S&P500 data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>.",
     file: "shiller_real.json",
     goodOverlay: true,
-    statFuncs: [Stats.average],
+    stats: [Stats.average],
     startYear: function(struct) {return struct["start"]+10;},
     datFunc: function(struct) {
       var newData = [];
@@ -81,7 +81,7 @@ var dataSets = [
     notes: "Inflation adjusted price per dollar of adjusted earnings. Historical S&P500 data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>.",
     file: "shiller_real.json",
     goodOverlay: true,
-    statFuncs: [Stats.average],
+    stats: [Stats.average],
     startYear: function(struct) {return struct["start"];},
     datFunc: function(struct) {
       var newData = [];
@@ -96,7 +96,7 @@ var dataSets = [
     notes: "Inflation adjusted earnings per share. Historical S&P500 data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>.",
     file: "shiller_real.json",
     goodOverlay: true,
-    statFuncs: defaultStats,
+    stats: defaultStats,
     startYear: function(struct) {return struct["start"];},
     datFunc: function(struct) {
       return struct["earnings"];
@@ -108,7 +108,7 @@ var dataSets = [
     file: "shiller_housing.json",
     goodOverlay: true,
     pointJump: 3, // Quarterly data
-    statFuncs: [Stats.totalGrowth, Stats.averageGrowthQuarterly, Stats.dollarsNow, Stats.timesDoubled],
+    stats: [Stats.totalGrowth, Stats.averageGrowthQuarterly, Stats.dollarsNow, Stats.timesDoubled],
     startYear: function(struct) {return struct["start"];},
     datFunc: function(struct) {
       return struct["price"];
@@ -120,7 +120,7 @@ var dataSets = [
     file: "shiller_housing.json",
     goodOverlay: true,
     pointJump: 12, // Yearly
-    statFuncs: [Stats.totalGrowth, Stats.timesDoubled, Stats.average],
+    stats: [Stats.totalGrowth, Stats.timesDoubled, Stats.average],
     startYear: function(struct) {return struct["start"];},
     datFunc: function(struct) {
       return struct["building"];
@@ -132,7 +132,7 @@ var dataSets = [
     file: "shiller_housing.json",
     goodOverlay: true,
     pointJump: 12, // Yearly
-    statFuncs: [Stats.average],
+    stats: [Stats.average],
     startYear: function(struct) {return struct["start"];},
     datFunc: function(struct) {
       return struct["longRate"];
@@ -143,7 +143,7 @@ var dataSets = [
     notes: "U.S Population in millions. Data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>.",
     file: "shiller_housing.json",
     pointJump: 12, // Yearly
-    statFuncs: [Stats.totalGrowth, Stats.timesDoubled, Stats.average],
+    stats: [Stats.totalGrowth, Stats.timesDoubled, Stats.average],
     startYear: function(struct) {return struct["start"];},
     datFunc: function(struct) {
       var newData = [];
@@ -204,7 +204,7 @@ function getDataSetStruct(set) {
   return {
     vals: set.datFunc(struct),
     firstYear: set.startYear(struct),
-    statFuncs: set.statFuncs,
+    stats: set.stats,
     pointJump: (set.pointJump || 1)
   }
 }

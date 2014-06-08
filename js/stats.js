@@ -10,42 +10,63 @@ var Stats = {
     var average = total / (end-start);
     return average;
   },
-  totalGrowth: function(data, start, end) {
-    var totalGrowth = Stats._calcTotalGrowth(data,start,end);
-    var text = String(((totalGrowth-1)*100).formatMoney(2,'.',',')) + '%';
-    return ["Total Growth", text];
+  totalGrowth: {
+    calc: function(data, start, end) {
+      var totalGrowth = Stats._calcTotalGrowth(data,start,end);
+      var text = String(((totalGrowth-1)*100).formatMoney(2,'.',',')) + '%';
+      return text;
+    },
+    name: "Total Growth"
   },
-  dollarsNow: function(data, start, end) {
-    var totalGrowth = Stats._calcTotalGrowth(data,start,end);
-    var text = "$" + totalGrowth.formatMoney(2,'.',',');
-    return ["$1 Becomes", text];
+  dollarsNow: {
+    calc: function(data, start, end) {
+      var totalGrowth = Stats._calcTotalGrowth(data,start,end);
+      var text = "$" + totalGrowth.formatMoney(2,'.',',');
+      return text;
+    },
+    name: "$1 Becomes"
   },
-  averageGrowth: function(data, start, end) {
-    var totalGrowth = Stats._calcTotalGrowth(data,start,end);
-    var avgGrowth = Math.pow(totalGrowth,(12/(end-start)))-1;
-    var text = String((avgGrowth*100).toFixed(2)) + '%';
-    return ["Average Growth", text];
+  averageGrowth: {
+    calc: function(data, start, end) {
+      var totalGrowth = Stats._calcTotalGrowth(data,start,end);
+      var avgGrowth = Math.pow(totalGrowth,(12/(end-start)))-1;
+      var text = String((avgGrowth*100).toFixed(2)) + '%';
+      return text;
+    },
+    name: "Average Growth"
   },
-  averageGrowthQuarterly: function(data, start, end) {
-    var totalGrowth = Stats._calcTotalGrowth(data,start,end);
-    var avgGrowth = Math.pow(totalGrowth,(12/((end-start)*3)))-1;
-    var text = String((avgGrowth*100).toFixed(2)) + '%';
-    return ["Average Growth", text];
+  averageGrowthQuarterly: {
+    calc: function(data, start, end) {
+      var totalGrowth = Stats._calcTotalGrowth(data,start,end);
+      var avgGrowth = Math.pow(totalGrowth,(12/((end-start)*3)))-1;
+      var text = String((avgGrowth*100).toFixed(2)) + '%';
+      return text;
+    },
+    name: "Average Growth"
   },
-  timesDoubled: function(data, start, end) {
-    var totalGrowth = Stats._calcTotalGrowth(data,start,end);
-    var doubled = Math.log(totalGrowth)/Math.log(2);
-    var text = String(doubled.toFixed(2));
-    return ["Times Doubled", text];
+  timesDoubled: {
+    calc: function(data, start, end) {
+      var totalGrowth = Stats._calcTotalGrowth(data,start,end);
+      var doubled = Math.log(totalGrowth)/Math.log(2);
+      var text = String(doubled.toFixed(2));
+      return text;
+    },
+    name: "Times Doubled"
   },
-  averagePercent: function(data, start, end) {
-    var average = Stats._calcAverage(data, start, end);
-    var text = String((average*100).toFixed(2)) + '%';
-    return ["Average", text];
+  averagePercent: {
+    calc: function(data, start, end) {
+      var average = Stats._calcAverage(data, start, end);
+      var text = String((average*100).toFixed(2)) + '%';
+      return text;
+    },
+    name: "Average"
   },
-  average: function(data, start, end) {
-    var average = Stats._calcAverage(data, start, end);
-    var text = average.formatMoney(2,'.',',');
-    return ["Average", text];
+  average: {
+    calc: function(data, start, end) {
+      var average = Stats._calcAverage(data, start, end);
+      var text = average.formatMoney(2,'.',',');
+      return text;
+    },
+    name: "Average"
   }
 };

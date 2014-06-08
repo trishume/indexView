@@ -75,6 +75,18 @@ loadTimeChooser: function() {
   }
 },
 
+loadStatViews: function(data) {
+  var statsNode = $('stats');
+  statsNode.innerHTML = '';
+
+  this.statViews = [];
+
+  for (var i = 0; i < data.stats.length; i++) {
+    var stat = data.stats[i];
+    this.statViews[i] = new StatView(statsNode, stat);
+  };
+},
+
 loadData: function (data) {
   this.data[0] = data;
   this.maxMonth = data.vals.length * data.pointJump;
@@ -97,7 +109,7 @@ loadData: function (data) {
   this.endMonth = Math.min(this.endMonth, this.maxMonth);
 
   this.clearOverlay();
-
+  this.loadStatViews(data);
 
   this.draw();
 },
@@ -222,27 +234,11 @@ updateTimeFields: function() {
 },
 
 updateStats: function (data) {
-  var stats = $('stats');
-  stats.innerHTML = '';
   var start = this.toIndex(data, this.startMonth);
   var end = this.toIndex(data, this.endMonth);
 
-  for (var i = 0; i < data.statFuncs.length; i++) {
-    var result = data.statFuncs[i](data.vals, start, end);
-
-    var title = document.createElement("strong");
-    title.appendChild(document.createTextNode(result[0]));
-    var content = document.createElement("div");
-    content.appendChild(document.createTextNode(result[1]));
-    content.className = "num";
-
-    var statNode = document.createElement("div");
-    statNode.appendChild(title);
-    statNode.appendChild(document.createElement("br"));
-    statNode.appendChild(content);
-    statNode.appendChild(document.createElement("br"));
-
-    stats.appendChild(statNode);
+  for (var i = 0; i < this.statViews.length; i++) {
+    this.statViews[i].update(data.vals, start, end);
   };
 },
 
