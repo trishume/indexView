@@ -169,19 +169,20 @@ clampTimespan: function() {
 
 mouse: function(event) {
   var y = event.clientY - this.canvas.offsetTop - this.canvas.offsetParent.offsetTop;
-  var x = event.clientX - this.canvas.offsetParent.offsetLeft;
+  var x = event.clientX - this.canvas.offsetParent.offsetLeft - this.canvas.offsetLeft;
   if(y > this.scrubGraph.top && this.mouseDown) {
     this.scrub(x);
+  } else if(y < this.bigGraph.bottom) {
+    this.trace(x);
   }
 },
 
 zoom: function (event) {
   var deltaFactor = (event.deltaMode == WheelEvent.DOM_DELTA_LINE) ? 20 : 1;
   var delta = event.deltaY * deltaFactor;
-  var mouseX = event.clientX - this.canvas.offsetLeft;
+  var mouseX = event.clientX - this.canvas.offsetParent.offsetLeft - this.canvas.offsetLeft;
 
-  var span = this.endMonth-this.startMonth;
-  var centerMonth = this.startMonth + mouseX/(this.width/span);
+  var centerMonth = this.xToMonth(mouseX);
   var factor = 1 + delta * 0.0002;
   this.endMonth = Math.round(factor*this.endMonth - centerMonth*(factor - 1));
   this.startMonth = Math.round(factor*this.startMonth + centerMonth*(1 - factor));
@@ -194,7 +195,6 @@ trace: function(x) {
   this.draw();
 
   var ctx = this.ctx;
-  x = x - this.canvas.offsetParent.offsetLeft;
 
   ctx.lineWidth = 1;
   ctx.strokeStyle = "rgb(200,50,50)"
@@ -202,10 +202,25 @@ trace: function(x) {
   ctx.font = "10pt Arial";
   ctx.fillStyle = "rgb(130,130,130)";
 
-  ctx.beginPath();
-  ctx.moveTo(x,0);
-  ctx.lineTo(x,this.graphBottom);
-  ctx.stroke();
+  // ctx.beginPath();
+  // ctx.moveTo(x,0);
+  // ctx.lineTo(x,this.bigGraph.bottom);
+  // ctx.stroke();
+
+  var fmonth = this.xToMonth(x);
+  var month = Math.floor(fmonth);
+  fmonth = fmonth % 1;
+  for (var i = 0; i < this.data.length; i++) {
+    var data = this.data[i];
+    var v1 = data.vals[month-data.startOffset];
+    var v2 = data.vals[month-data.startOffset+1] || v1;
+    var val = (1-fmonth)*v1 + fmonth*v2;
+    var y = this.valToY(data.curRng, this.bigGraph, val);
+    ctx.fillStyle = data.color;
+    ctx.beginPath();
+    ctx.arc(x,y,6,0,2*Math.PI);
+    ctx.fill();
+  };
 },
 
 scrub: function(x) {
@@ -247,6 +262,15 @@ toIndex: function (data,n) {
   return Math.floor(n/data.pointJump);
 },
 
+xToMonth: function(x) {
+  var span = this.endMonth-this.startMonth;
+  return this.startMonth + x/(this.width/span);
+},
+
+valToY: function(rng, graph, val) {
+   return graph.bottom - (val-rng.min)/(rng.max-rng.min)*(graph.bottom - graph.top);
+},
+
 calcRange: function (data, start, end) {
   var min = Infinity;
   var max = 0.0;
@@ -258,14 +282,12 @@ calcRange: function (data, start, end) {
 },
 
 calcRanges: function () {
-  var ranges = [];
   for (var i = 0; i < this.data.length; i++) {
     var data = this.data[i];
     var start = this.toIndex(data, this.startMonth);
     var end = this.toIndex(data, this.endMonth);
-    ranges[i] = this.calcRange(data, start, end);
+    this.data[i].curRng = this.calcRange(data, start, end);
   };
-  return ranges;
 },
 
 draw: function () {
@@ -274,11 +296,12 @@ draw: function () {
 
   this.updateTimeFields();
 
-  var ranges = this.calcRanges();
+  this.calcRanges();
 
   this.drawLines(this.bigGraph, this.startMonth, this.endMonth);
+  this.drawStartLevel(this.data[0], this.bigGraph, this.startMonth);
   for (var i = this.data.length - 1; i >= 0; i--) {
-    this.drawData(this.data[i], this.bigGraph, this.startMonth, this.endMonth, ranges[i]);
+    this.drawData(this.data[i], this.bigGraph, this.startMonth, this.endMonth, this.data[i].curRng);
   };
 
   // scrub graph
@@ -329,28 +352,41 @@ drawLines: function(opt, startMonth, endMonth){
   }
 },
 
-drawData: function (data, opt, startMonth, endMonth, rng){
+drawData: function (data, graph, startMonth, endMonth, rng){
   var ctx = this.ctx;
   var start = this.toIndex(data, startMonth);
   var end = this.toIndex(data, endMonth);
   var span = end-start;
-  var dx = (opt.width/span);
-  var jump = (data.pointJump == 1) ? Math.ceil(span/opt.width) : 1;
+  var dx = (graph.width/span);
+  var jump = (data.pointJump == 1) ? Math.ceil(span/graph.width) : 1;
 
   // Graph
   ctx.strokeStyle = data.color;
-  ctx.lineWidth = opt.lineWidth * data.widthMultiple;
+  ctx.lineWidth = graph.lineWidth * data.widthMultiple;
   ctx.lineJoin = "round";
 
   ctx.beginPath();
-  var graphHeight = opt.bottom - opt.top;
-  var y1 = (data.vals[start]-rng.min)/(rng.max-rng.min)*graphHeight;
-  ctx.moveTo(0,opt.bottom - y1);
+  var y1 = this.valToY(rng, graph, data.vals[start]);
+  ctx.moveTo(0,y1);
   for (var i = start; i < end; i+=jump) {
-    var y = (data.vals[i]-rng.min)/(rng.max-rng.min)*graphHeight;
+    var y = this.valToY(rng, graph, data.vals[i]);
     var x = (i-start)*dx;
-    ctx.lineTo(x,opt.bottom - y);
+    ctx.lineTo(x,y);
   };
+  ctx.stroke();
+},
+
+drawStartLevel: function(data, graph, startMonth) {
+  var ctx = this.ctx;
+  var start = this.toIndex(data, startMonth);
+  var y = this.valToY(data.curRng, graph, data.vals[start]);
+
+  ctx.strokeStyle = "#999999";
+  ctx.lineWidth = 1;
+
+  ctx.beginPath()
+  ctx.moveTo(0, y);
+  ctx.lineTo(graph.width, y);
   ctx.stroke();
 },
 
