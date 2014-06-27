@@ -191,6 +191,19 @@ zoom: function (event) {
   this.draw();
 },
 
+dateText: function(month) {
+  var year = String(Math.floor(month / 12) + this.firstYear);
+  var month = String(month % 12);
+  if(month.length == 1 ) month = "0" + month;
+  return year + "/" + month;
+},
+
+traceText: function(data, month) {
+  var start = this.toIndex(data, this.startMonth);
+  var end = this.toIndex(data, month);
+  return Stats.totalGrowth.calc(data.vals, start, end);
+},
+
 trace: function(x) {
   this.draw();
 
@@ -202,25 +215,28 @@ trace: function(x) {
   ctx.font = "10pt Arial";
   ctx.fillStyle = "rgb(130,130,130)";
 
-  // ctx.beginPath();
-  // ctx.moveTo(x,0);
-  // ctx.lineTo(x,this.bigGraph.bottom);
-  // ctx.stroke();
-
   var fmonth = this.xToMonth(x);
   var month = Math.floor(fmonth);
   fmonth = fmonth % 1;
-  for (var i = 0; i < this.data.length; i++) {
-    var data = this.data[i];
-    var v1 = data.vals[month-data.startOffset];
-    var v2 = data.vals[month-data.startOffset+1] || v1;
-    var val = (1-fmonth)*v1 + fmonth*v2;
-    var y = this.valToY(data.curRng, this.bigGraph, val);
-    ctx.fillStyle = data.color;
-    ctx.beginPath();
-    ctx.arc(x,y,6,0,2*Math.PI);
-    ctx.fill();
-  };
+
+  var data = this.data[0];
+  var v1 = data.vals[this.toIndex(data, month)];
+  var v2 = data.vals[this.toIndex(data, month)+1] || v1;
+  var val = (1-fmonth)*v1 + fmonth*v2;
+  var y = this.valToY(data.curRng, this.bigGraph, val);
+
+  // trace dot
+  ctx.fillStyle = data.color;
+  ctx.beginPath();
+  ctx.arc(x,y,6,0,2*Math.PI);
+  ctx.fill();
+
+  // text
+  var text = this.traceText(data, month);
+  ctx.textAlign = "right";
+  ctx.font = "12pt Arial";
+  ctx.fillStyle = (text[0] == "-") ? "red" : "green";
+  ctx.fillText(text, x - 10, y - 12);
 },
 
 scrub: function(x) {
