@@ -7,7 +7,8 @@ loadCanvas: function () {
     this.ctx = this.canvas.getContext('2d');
 
     var _zoom = this.zoom.bind(this);
-    this.canvas.addEventListener('mousewheel',function(event) {
+    var mousewheelevt=(/Firefox/i.test(navigator.userAgent))? "DOMMouseScroll" : "mousewheel";
+    this.canvas.addEventListener(mousewheelevt,function(event) {
         _zoom(event);
         event.preventDefault();
         return false;
@@ -178,12 +179,20 @@ mouse: function(event) {
 },
 
 zoom: function (event) {
-  var deltaFactor = (event.deltaMode == WheelEvent.DOM_DELTA_LINE) ? 20 : 1;
-  var delta = event.deltaY * deltaFactor;
+  // Cross browser mouse wheel scale
+  var d = event.detail, w = event.wheelDelta,
+      n = 225, n1 = n-1;
+  // Normalize delta
+  d = d ? w && (f = w/d) ? d/f : -d/1.35 : w/120;
+  // Quadratic scale if |d| > 1
+  d = d < 1 ? d < -1 ? (-Math.pow(d, 2) - n1) / n : d : (Math.pow(d, 2) + n1) / n;
+  // Delta *should* not be greater than 2...
+  var delta = Math.min(Math.max(d / 2, -1), 1);
+
   var mouseX = event.clientX - this.canvas.offsetParent.offsetLeft - this.canvas.offsetLeft;
 
   var centerMonth = this.xToMonth(mouseX);
-  var factor = 1 + delta * 0.0002;
+  var factor = 1 + delta * -0.1;
   this.endMonth = Math.round(factor*this.endMonth - centerMonth*(factor - 1));
   this.startMonth = Math.round(factor*this.startMonth + centerMonth*(1 - factor));
 
@@ -236,7 +245,7 @@ trace: function(x) {
   ctx.textAlign = "right";
   ctx.font = "12pt Arial";
   ctx.fillStyle = (text[0] == "-") ? "red" : "green";
-  ctx.fillText(text, x - 10, y - 12);
+  ctx.fillText(text, x - 10, y - 5);
 },
 
 scrub: function(x) {
