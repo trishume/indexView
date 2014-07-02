@@ -17,23 +17,25 @@ body {
   float: left;
   z-index: -1;
 
-  width: 80%;
-  height: 400px;
+  // width: 80%;
+  // height: 350px;
 }
 #stats {
   float: left;
   padding-left: 10px;
-  width: 150px;
+  padding-top: 10px;
+  width: 180px;
   text-align: right;
 }
 
 #stats strong {
   font-weight: normal;
-  font-size: 14pt;
+  font-size: 16pt;
 }
 
 #stats .num {
-  font-size: 15pt;
+  padding-top: 5px;
+  font-size: 18pt;
   color: rgb(70, 145, 231);
 }
 

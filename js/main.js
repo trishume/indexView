@@ -45,13 +45,20 @@ function loadOverlay(setNum) {
   Viewer.loadOverlay(data);
 }
 
+function sizeCanvas() {
+  var width = document.body.clientWidth;
+  var canvas = $('graph');
+  canvas.width = Math.min(width - 230, 1200);
+  canvas.height = Math.max(canvas.width * 0.4, 320);
+  Viewer.loadSize();
+}
+
 function load() {
   Viewer.loadCanvas();
+  sizeCanvas();
   loadSetChooser($('dataset-chooser'), dataSets);
   loadSetChooser($('overlay-chooser'), dataSets);
   loadData(0);
 }
 
-window.addEventListener('resize', function() {
-  Viewer.loadSize();
-}, false);
+window.addEventListener('resize', sizeCanvas, false);

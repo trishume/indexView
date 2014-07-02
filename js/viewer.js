@@ -60,11 +60,13 @@ loadCanvas: function () {
 },
 
 loadSize: function() {
-  this.width = this.canvas.clientWidth;
-  this.height = this.canvas.clientHeight;
+  // this.width = this.canvas.clientWidth;
+  // this.height = this.canvas.clientHeight;
 
-  this.canvas.height = this.height;
-  this.canvas.width = this.width;
+  // this.canvas.height = this.height;
+  // this.canvas.width = this.width;
+  this.width = this.canvas.width;
+  this.height = this.canvas.height;
 
   this.bigGraph.width = this.width;
   this.bigGraph.bottom = this.height - 70;
