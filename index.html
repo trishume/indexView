@@ -12,43 +12,49 @@
   <script type="text/javascript" src="js/main.js"></script>
 </head>
 <body onload="load();">
-  <div id="datasets">
-    <select name="datasets" id="dataset-chooser" onchange="setChooserChanged()" class="titleSet top-row"></select>
-    <div id="overlay-form">
-      <span class="top-label">Overlay: </span>
-      <select name="overlays" id="overlay-chooser" onchange="overlayChanged()" class="top-row">
-      </select>
+  <div id="container" class="left-box">
+    <div id="datasets">
+      <select name="datasets" id="dataset-chooser" onchange="setChooserChanged()" class="titleSet top-row left-box"></select>
+      <div id="overlay-form">
+        <span class="top-label">Overlay: </span>
+        <select name="overlays" id="overlay-chooser" onchange="overlayChanged()" class="right-box top-row">
+        </select>
+      </div>
+      <div class="clear"></div>
     </div>
-    <div class="clear"></div>
-  </div>
-  <div id="widget">
-    <div class="time">
-      <span id="time-mode-0">
-        <span id="date-field-0"></span>
-        <a href="#" onclick="Viewer.changeMode()" class="modeChange">to</a>
-        <span id="date-field-3"></span>
-      </span>
-      <span id="time-mode-1">
-        <span id="date-field-1"></span>
-        <a href="#" onclick="Viewer.changeMode()" class="modeChange">for years:</a>&nbsp;
-        <input type="text" id="yearCount" onchange="Viewer.fieldChanged()" class="time-field">
-      </span>
-      <span id="time-mode-2">
-        <span id="date-field-2"></span>
-        <a href="#" onclick="Viewer.changeMode()" class="modeChange">to present</a>
-      </span>
+    <div id="widget">
+      <div class="time">
+        <span id="time-mode-0">
+          <span id="date-field-0"></span>
+          <a href="#" onclick="Viewer.changeMode()" class="modeChange">to</a>
+          <span id="date-field-3"></span>
+        </span>
+        <span id="time-mode-1">
+          <span id="date-field-1"></span>
+          <a href="#" onclick="Viewer.changeMode()" class="modeChange">for years:</a>&nbsp;
+          <input type="text" id="yearCount" onchange="Viewer.fieldChanged()" class="time-field">
+        </span>
+        <span id="time-mode-2">
+          <span id="date-field-2"></span>
+          <a href="#" onclick="Viewer.changeMode()" class="modeChange">to present</a>
+        </span>
+      </div>
+      <canvas id="graph" width="625" height="300"></canvas>
+      <div id="stats">
+      </div>
+      <div class="sep"></div>
     </div>
-    <canvas id="graph" width="625" height="300"></canvas>
-    <div id="stats">
-    </div>
-    <div class="sep"></div>
-  </div>
 
-  <div class="notes">
-    <strong>Notes: </strong>
-    <span id="dataset-notes"></span>
+    <div class="bottom-row">
+      <div class="logo left-box">
+        IndexView<br>
+        <small>By <a href="http://thume.ca/">Tristan Hume</a></small>
+      </div>
+      <div class="notes">
+        <strong>Data Notes: </strong><br>
+        <span id="dataset-notes"></span>
+      </div>
+    </div>
   </div>
-  <div id="footer">
-    <small>Created by <a href="http://thume.ca/">Tristan Hume</a></small>
 </body>
 </html>

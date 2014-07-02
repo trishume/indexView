@@ -1,9 +1,13 @@
 ---
 ---
 
+$border-color: #CCCCCC;
+
 body {
   font-family: sans-serif;
   width: 100%;
+  min-width: 750px;
+  max-width: 1300px;
   margin: 0px;
 }
 
@@ -13,7 +17,7 @@ body {
   width: 100%;
 
   border-style: solid;
-  border-color: #D1D1D1;
+  border-color: $border-color;
   border-width: 1px 0px;
 }
 
@@ -40,7 +44,8 @@ body {
 #stats .num {
   padding-top: 5px;
   font-size: 18pt;
-  color: rgb(70, 145, 231);
+  // color: rgb(70, 145, 231);
+  color: #0072F8;
 }
 
 .clear {
@@ -64,6 +69,7 @@ body {
   float:left;
   position: absolute;
   top: 15px;
+  left: 8px;
   font-size: 20pt;
   z-index: 500;
 }
@@ -72,7 +78,7 @@ body {
   border-color: rgb(189, 195, 199);
   border-width: 1px;
   border-style: solid;
-  border-radius: 6px;
+  border-radius: 5px;
   box-sizing: border-box;
   color: rgb(52, 73, 94);
   font-size: 18pt;
@@ -119,7 +125,7 @@ select {
   background-repeat: no-repeat;
   background-position: 97% center;
 
-  border: solid #cccccc;
+  border: solid $border-color;
   border-width: 0px 1px;
   border-radius: 0px;
 
@@ -137,9 +143,9 @@ select:hover {
     border-color: #999999;
 }
 
-select:active {
-  font-size: 18pt !important;
-}
+// select:active {
+//   font-size: 18pt !important;
+// }
 
 select.top-row {
   font-size: 16pt;
@@ -155,6 +161,16 @@ select.titleSet {
   width: 50%;
 }
 
+.right-box {
+  border: solid $border-color;
+  border-width: 0px 0px 0px 1px;
+}
+
+.left-box {
+  border: solid $border-color;
+  border-width: 0px 1px 0px 0px;
+}
+
 #overlay-form {
   float: right;
 }
@@ -164,9 +180,42 @@ select.titleSet {
   color: gray;
 }
 
+.bottom-row {
+  height: 75px;
+  border: solid $border-color;
+  border-width: 0px 0px 1px 0px;
+}
+
+.logo {
+  float: left;
+  height: 70px;
+  padding: 5px 7px 0px 8px;
+
+  color: #4A4A4A;
+  font-size: 28pt;
+  font-weight: normal;
+
+  position: relative;
+}
+
+.logo small {
+  font-size: 12pt;
+
+  color: gray;
+
+  position: relative;
+  top: -20px;
+}
+
+
 .notes {
-  padding-top: 10px;
-  clear: both;
+  float: left;
+  width: 60%;
+
+  color: #4A4A4A;
+  font-size: 13pt;
+
+  padding: 5px 10px;
 }
 
 #footer {

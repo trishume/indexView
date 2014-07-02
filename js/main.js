@@ -50,7 +50,7 @@ function loadOverlay(setNum) {
 function sizeCanvas() {
   var width = document.body.clientWidth;
   var canvas = $('graph');
-  canvas.width = Math.min(width - 205, 1200);
+  canvas.width = width - 205;
   canvas.height = Math.max(canvas.width * 0.4, 320);
   Viewer.loadSize();
 }
