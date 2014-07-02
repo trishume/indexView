@@ -1,8 +1,6 @@
 var Viewer = {
 loadCanvas: function () {
   this.canvas = $('graph');
-  this.width = this.canvas.width;
-  this.height = this.canvas.height;
   if (this.canvas.getContext) {
     this.ctx = this.canvas.getContext('2d');
 
@@ -33,7 +31,6 @@ loadCanvas: function () {
   this.bigGraph = {
     top: 20,
     bottom: 240,
-    width: this.width,
     lineWidth: 4,
     lineTop: 0,
     decadeLabels: true,
@@ -43,7 +40,6 @@ loadCanvas: function () {
   this.scrubGraph = {
     top: 270,
     bottom: 300,
-    width: this.width,
     lineWidth: 2,
     windowColor: "rgba(100,100,100,0.2)",
     lineTop: 290,
@@ -59,6 +55,24 @@ loadCanvas: function () {
   this.endMonth = Infinity;
 
   this.data = [];
+
+  this.loadSize();
+},
+
+loadSize: function() {
+  this.width = this.canvas.clientWidth;
+  this.height = this.canvas.clientHeight;
+
+  this.canvas.height = this.height;
+  this.canvas.width = this.width;
+
+  this.bigGraph.width = this.width;
+  this.bigGraph.bottom = this.height - 70;
+  this.scrubGraph.width = this.width;
+  this.scrubGraph.top = this.height - 40;
+  this.scrubGraph.bottom = this.height;
+
+  this.draw();
 },
 
 loadDateFields: function() {

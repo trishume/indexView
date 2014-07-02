@@ -51,3 +51,7 @@ function load() {
   loadSetChooser($('overlay-chooser'), dataSets);
   loadData(0);
 }
+
+window.addEventListener('resize', function() {
+  Viewer.loadSize();
+}, false);

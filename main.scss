@@ -3,23 +3,22 @@
 
 body {
   font-family: sans-serif;
+  width: 100%;
+  margin: 0px;
 }
 
 #widget {
   position: relative;
   margin-top: 10px;
-  width: 798px;
-  padding: 5px;
-
-  border-color: rgb(189, 195, 199);
-  border-width: 1px;
-  border-style: solid;
-  border-radius: 6px;
+  width: 100%;
 }
 
 #graph {
   float: left;
   z-index: -1;
+
+  width: 80%;
+  height: 400px;
 }
 #stats {
   float: left;
