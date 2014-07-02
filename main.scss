@@ -9,8 +9,12 @@ body {
 
 #widget {
   position: relative;
-  margin-top: 10px;
+  // margin-top: 10px;
   width: 100%;
+
+  border-style: solid;
+  border-color: #D1D1D1;
+  border-width: 1px 0px;
 }
 
 #graph {
@@ -45,7 +49,7 @@ body {
 
 .sep {
   clear: both;
-  height: 15px;
+  height: 2px;
 }
 
 .modeChange {
@@ -115,38 +119,49 @@ select {
   background-repeat: no-repeat;
   background-position: 97% center;
 
-  border: 1px solid #cccccc;
+  border: solid #cccccc;
+  border-width: 0px 1px;
+  border-radius: 0px;
+
+
   padding: 0.2rem;
   font-size: 12pt;
   color: rgba(0, 0, 0, 0.75);
   line-height: normal;
-  border-radius: 5;
   height: 35px;
   margin: 0px;
 }
 
-select.radius {
-    border-radius: 3px;
-}
 select:hover {
     /*background-color: #f3f3f3;*/
     border-color: #999999;
 }
 
+select:active {
+  font-size: 18pt !important;
+}
+
+select.top-row {
+  font-size: 16pt;
+  padding-left: 8px;
+  height: 60px;
+}
+
 select.titleSet {
-  font-size: 14pt;
-  font-weight: bold;
+  font-size: 22pt;
+  // font-weight: bold;
   float: left;
   /*margin-bottom: 8px;*/
-  width: 500px;
+  width: 50%;
 }
 
 #overlay-form {
   float: right;
 }
 
-#datasets {
-  width: 810px;
+.top-label {
+  font-size: 16pt;
+  color: gray;
 }
 
 .notes {

@@ -21,6 +21,8 @@ function overlayChanged() {
     return;
   }
 
+  select.blur();
+
   for (var i = dataSets.length - 1; i >= 0; i--) {
     if(dataSets[i].name == select.value) {
       loadOverlay(i);
@@ -48,7 +50,7 @@ function loadOverlay(setNum) {
 function sizeCanvas() {
   var width = document.body.clientWidth;
   var canvas = $('graph');
-  canvas.width = Math.min(width - 230, 1200);
+  canvas.width = Math.min(width - 205, 1200);
   canvas.height = Math.max(canvas.width * 0.4, 320);
   Viewer.loadSize();
 }
