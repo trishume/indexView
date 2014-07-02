@@ -4,7 +4,7 @@
 $border-color: #CCCCCC;
 
 body {
-  font-family: sans-serif;
+  font-family: 'PT Sans Caption', sans-serif;
   width: 100%;
   min-width: 750px;
   max-width: 1300px;
@@ -38,12 +38,12 @@ body {
 
 #stats strong {
   font-weight: normal;
-  font-size: 16pt;
+  font-size: 14pt;
 }
 
 #stats .num {
   padding-top: 5px;
-  font-size: 18pt;
+  font-size: 16pt;
   // color: rgb(70, 145, 231);
   color: #0072F8;
 }
@@ -102,6 +102,7 @@ body {
 
 .date-months {
   font-size: 9pt;
+  font-family: sans-serif;
   position: absolute;
   width: 100px;
   text-align: center;
@@ -132,6 +133,7 @@ select {
 
   padding: 0.2rem;
   font-size: 12pt;
+  font-family: 'PT Sans Caption', sans-serif;
   color: rgba(0, 0, 0, 0.75);
   line-height: normal;
   height: 35px;
