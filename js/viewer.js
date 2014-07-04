@@ -225,7 +225,7 @@ dateText: function(month) {
 
 traceText: function(data, month) {
   var start = this.toIndex(data, this.startMonth);
-  var end = this.toIndex(data, month);
+  var end = this.toIndex(data, month)+1;
   return Stats.totalGrowth.calc(data.vals, start, end);
 },
 
@@ -240,11 +240,11 @@ trace: function(x) {
   ctx.font = "10pt Arial";
   ctx.fillStyle = "rgb(130,130,130)";
 
+  var data = this.data[0];
   var fmonth = this.xToMonth(x);
   var month = Math.floor(fmonth);
-  fmonth = fmonth % 1;
+  fmonth = (fmonth % data.pointJump) / data.pointJump;
 
-  var data = this.data[0];
   var v1 = data.vals[this.toIndex(data, month)];
   var v2 = data.vals[this.toIndex(data, month)+1] || v1;
   var val = (1-fmonth)*v1 + fmonth*v2;
@@ -301,6 +301,10 @@ updateStats: function (data) {
 toIndex: function (data,n) {
   n = n - data.startOffset;
   return Math.floor(n/data.pointJump);
+},
+
+indexToMonth: function(data, i) {
+  return i*data.pointJump + data.startOffset;
 },
 
 xToMonth: function(x) {
@@ -396,9 +400,9 @@ drawLines: function(opt, startMonth, endMonth){
 drawData: function (data, graph, startMonth, endMonth, rng){
   var ctx = this.ctx;
   var start = this.toIndex(data, startMonth);
-  var end = this.toIndex(data, endMonth);
+  var end = this.toIndex(data, endMonth)+1;
   var span = end-start;
-  var dx = (graph.width/span);
+  var dx = (this.width/(endMonth-startMonth));
   var jump = (data.pointJump == 1) ? Math.ceil(span/graph.width) : 1;
 
   // Graph
@@ -408,10 +412,10 @@ drawData: function (data, graph, startMonth, endMonth, rng){
 
   ctx.beginPath();
   var y1 = this.valToY(rng, graph, data.vals[start]);
-  ctx.moveTo(0,y1);
+  ctx.moveTo((this.indexToMonth(data,start) - startMonth)*dx,y1);
   for (var i = start; i < end; i+=jump) {
     var y = this.valToY(rng, graph, data.vals[i]);
-    var x = (i-start)*dx;
+    var x = (this.indexToMonth(data,i) - startMonth)*dx;
     ctx.lineTo(x,y);
   };
   ctx.stroke();

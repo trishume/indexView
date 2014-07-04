@@ -1,8 +1,10 @@
 var defaultStats = [Stats.totalGrowth, Stats.averageGrowth, Stats.dollarsNow, Stats.timesDoubled];
+var shillerInfo = "Historical S&P500 data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>.";
+var shillerHousing = "Data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>.";
 var dataSets = [
   {
     name: "S&P500 (With Dividends)",
-    notes: "Historical S&P500 data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>. Not inflation adjusted. Includes reinvested dividends.",
+    notes: shillerInfo + " Not inflation adjusted. Includes reinvested dividends.",
     file: "shiller_absolute.json",
     group: "s&pIndex",
     stats: defaultStats,
@@ -11,7 +13,7 @@ var dataSets = [
   },
   {
     name: "S&P500",
-    notes: "Historical S&P500 data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>. Not inflation adjusted. Dividends not reinvested.",
+    notes: shillerInfo + " Not inflation adjusted. Dividends not reinvested.",
     file: "shiller_absolute.json",
     group: "s&pIndex",
     goodOverlay: true,
@@ -23,7 +25,7 @@ var dataSets = [
   },
   {
     name: "Real S&P500 (With Dividends)",
-    notes: "Historical S&P500 data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>. Not inflation adjusted. Includes reinvested dividends.",
+    notes: shillerInfo + " Not inflation adjusted. Includes reinvested dividends.",
     file: "shiller_real.json",
     group: "s&pIndex",
     stats: defaultStats,
@@ -32,7 +34,7 @@ var dataSets = [
   },
   {
     name: "Inflation adjusted S&P500",
-    notes: "Historical S&P500 data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>. Inflation adjusted. Dividends not reinvested.",
+    notes: shillerInfo + " Inflation adjusted. Dividends not reinvested.",
     file: "shiller_real.json",
     group: "s&pIndex",
     stats: defaultStats,
@@ -43,7 +45,7 @@ var dataSets = [
   },
   {
     name: "S&P500 Dividend Yield",
-    notes: "Yearly dividend as a percentage of price. Historical S&P500 data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>.",
+    notes: "Yearly dividend as a percentage of price. " + shillerInfo,
     file: "shiller_absolute.json",
     goodOverlay: true,
     stats: [Stats.averagePercent],
@@ -58,7 +60,7 @@ var dataSets = [
   },
   {
     name: "Shiller P/E10 Ratio",
-    notes: "Inflation adjusted price per dollar of average earnings over past 10 years. Historical S&P500 data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>.",
+    notes: "Inflation adjusted price per dollar of average earnings over past 10 years. " + shillerInfo,
     file: "shiller_real.json",
     goodOverlay: true,
     stats: [Stats.average],
@@ -78,7 +80,7 @@ var dataSets = [
   },
   {
     name: "S&P500 P/E Ratio",
-    notes: "Inflation adjusted price per dollar of adjusted earnings. Historical S&P500 data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>.",
+    notes: "Inflation adjusted price per dollar of adjusted earnings. " + shillerInfo,
     file: "shiller_real.json",
     goodOverlay: true,
     stats: [Stats.average],
@@ -93,7 +95,7 @@ var dataSets = [
   },
   {
     name: "S&P500 Real Earnings",
-    notes: "Inflation adjusted earnings per share. Historical S&P500 data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>.",
+    notes: "Inflation adjusted earnings per share. " + shillerInfo,
     file: "shiller_real.json",
     goodOverlay: true,
     stats: defaultStats,
@@ -104,7 +106,7 @@ var dataSets = [
   },
   {
     name: "Shiller Home Price Index",
-    notes: "Index that approxmately tracks the price of housing, adjusted for inflation. Data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>.",
+    notes: "Index that approxmately tracks the price of housing, adjusted for inflation. " + shillerHousing,
     file: "shiller_housing.json",
     goodOverlay: true,
     pointJump: 3, // Quarterly data
@@ -116,7 +118,7 @@ var dataSets = [
   },
   {
     name: "Shiller Building Cost Index",
-    notes: "Index that approxmately tracks the cost of building, adjusted for inflation. Data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>.",
+    notes: "Index that approxmately tracks the cost of building, adjusted for inflation. " + shillerHousing,
     file: "shiller_housing.json",
     goodOverlay: true,
     pointJump: 12, // Yearly
@@ -128,7 +130,7 @@ var dataSets = [
   },
   {
     name: "Long Term Borrowing Rate",
-    notes: "Interest rate for long term loans. Data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>.",
+    notes: "Interest rate for long term loans. " + shillerHousing,
     file: "shiller_housing.json",
     goodOverlay: true,
     pointJump: 12, // Yearly
@@ -140,7 +142,7 @@ var dataSets = [
   },
   {
     name: "U.S Population",
-    notes: "U.S Population in millions. Data from <a href='http://www.econ.yale.edu/~shiller/data.htm'>Robert Shiller</a>.",
+    notes: "U.S Population in millions. " + shillerHousing,
     file: "shiller_housing.json",
     pointJump: 12, // Yearly
     stats: [Stats.totalGrowth, Stats.timesDoubled, Stats.average],
