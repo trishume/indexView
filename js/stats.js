@@ -71,5 +71,13 @@ var Stats = {
       return text;
     },
     name: "Average"
-  }
+  },
+  finalValue: {
+    calc: function(data, start, end) {
+      var val = data[end];
+      var text = val.formatMoney(2,'.',',');
+      return text;
+    },
+    name: "Final Value"
+  },
 };

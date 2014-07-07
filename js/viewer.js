@@ -223,7 +223,12 @@ dateText: function(month) {
   return year + "/" + month;
 },
 
-traceText: function(data, month) {
+traceVal: function(data, month) {
+  var end = this.toIndex(data, month)+1;
+  return Stats.finalValue.calc(data.vals,0, end);
+},
+
+traceGrowth: function(data, month) {
   var start = this.toIndex(data, this.startMonth);
   var end = this.toIndex(data, month)+1;
   return Stats.totalGrowth.calc(data.vals, start, end);
@@ -257,11 +262,23 @@ trace: function(x) {
   ctx.fill();
 
   // text
-  var text = this.traceText(data, month);
   ctx.textAlign = "right";
-  ctx.font = "12pt Arial";
-  ctx.fillStyle = (text[0] == "-") ? "red" : "green";
-  ctx.fillText(text, x - 10, y - 5);
+  var growthText = this.traceGrowth(data, month);
+  var growStyle = (growthText[0] == "-") ? "red" : "green";
+  if(data.traceShowValue) {
+    var valText = this.traceVal(data, month);
+    ctx.fillStyle = "black";
+    ctx.font = "14pt Arial";
+    ctx.fillText(valText, x - 10, y - 17);
+    ctx.fillStyle = growStyle;
+    ctx.font = "10pt Arial";
+    ctx.fillText(growthText, x - 10, y - 5);
+  } else {
+    ctx.font = "12pt Arial";
+    ctx.fillStyle = growStyle;
+    ctx.fillText(growthText, x - 10, y - 5);
+  }
+
 },
 
 scrub: function(x) {

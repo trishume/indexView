@@ -17,6 +17,7 @@ var dataSets = [
     file: "shiller_absolute.json",
     group: "s&pIndex",
     goodOverlay: true,
+    traceShowValue: true,
     stats: defaultStats,
     startYear: function(struct) {return struct["start"];},
     datFunc: function(struct) {
@@ -33,10 +34,11 @@ var dataSets = [
     datFunc: reinvestDividends
   },
   {
-    name: "Inflation adjusted S&P500",
+    name: "Real S&P500",
     notes: shillerInfo + " Inflation adjusted. Dividends not reinvested.",
     file: "shiller_real.json",
     group: "s&pIndex",
+    traceShowValue: true,
     stats: defaultStats,
     startYear: function(struct) {return struct["start"];},
     datFunc: function(struct) {
@@ -48,6 +50,7 @@ var dataSets = [
     notes: "Yearly dividend as a percentage of price. " + shillerInfo,
     file: "shiller_absolute.json",
     goodOverlay: true,
+    traceShowValue: true,
     stats: [Stats.averagePercent],
     startYear: function(struct) {return struct["start"];},
     datFunc: function(struct) {
@@ -63,6 +66,7 @@ var dataSets = [
     notes: "Inflation adjusted price per dollar of average earnings over past 10 years. " + shillerInfo,
     file: "shiller_real.json",
     goodOverlay: true,
+    traceShowValue: true,
     stats: [Stats.average],
     startYear: function(struct) {return struct["start"]+10;},
     datFunc: function(struct) {
@@ -83,6 +87,7 @@ var dataSets = [
     notes: "Inflation adjusted price per dollar of adjusted earnings. " + shillerInfo,
     file: "shiller_real.json",
     goodOverlay: true,
+    traceShowValue: true,
     stats: [Stats.average],
     startYear: function(struct) {return struct["start"];},
     datFunc: function(struct) {
@@ -98,6 +103,7 @@ var dataSets = [
     notes: "Inflation adjusted earnings per share. " + shillerInfo,
     file: "shiller_real.json",
     goodOverlay: true,
+    traceShowValue: true,
     stats: defaultStats,
     startYear: function(struct) {return struct["start"];},
     datFunc: function(struct) {
@@ -109,6 +115,7 @@ var dataSets = [
     notes: "Index that approxmately tracks the price of housing, adjusted for inflation. " + shillerHousing,
     file: "shiller_housing.json",
     goodOverlay: true,
+    traceShowValue: true,
     pointJump: 3, // Quarterly data
     stats: [Stats.totalGrowth, Stats.averageGrowthQuarterly, Stats.dollarsNow, Stats.timesDoubled],
     startYear: function(struct) {return struct["start"];},
@@ -121,6 +128,7 @@ var dataSets = [
     notes: "Index that approxmately tracks the cost of building, adjusted for inflation. " + shillerHousing,
     file: "shiller_housing.json",
     goodOverlay: true,
+    traceShowValue: true,
     pointJump: 12, // Yearly
     stats: [Stats.totalGrowth, Stats.timesDoubled, Stats.average],
     startYear: function(struct) {return struct["start"];},
@@ -133,6 +141,7 @@ var dataSets = [
     notes: "Interest rate for long term loans. " + shillerHousing,
     file: "shiller_housing.json",
     goodOverlay: true,
+    traceShowValue: true,
     pointJump: 12, // Yearly
     stats: [Stats.average],
     startYear: function(struct) {return struct["start"];},
@@ -144,8 +153,9 @@ var dataSets = [
     name: "U.S Population",
     notes: "U.S Population in millions. " + shillerHousing,
     file: "shiller_housing.json",
+    traceShowValue: true,
     pointJump: 12, // Yearly
-    stats: [Stats.totalGrowth, Stats.timesDoubled, Stats.average],
+    stats: [Stats.totalGrowth, Stats.timesDoubled, Stats.finalValue, Stats.average],
     startYear: function(struct) {return struct["start"];},
     datFunc: function(struct) {
       var newData = [];
@@ -207,6 +217,7 @@ function getDataSetStruct(set) {
     vals: set.datFunc(struct),
     firstYear: set.startYear(struct),
     stats: set.stats,
+    traceShowValue: set.traceShowValue,
     pointJump: (set.pointJump || 1)
   }
 }
