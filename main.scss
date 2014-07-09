@@ -6,7 +6,7 @@ $border-color: #CCCCCC;
 body {
   font-family: 'PT Sans Caption', sans-serif;
   width: 100%;
-  min-width: 750px;
+  min-width: 700px;
   max-width: 1300px;
   margin: 0px;
 }
@@ -152,6 +152,7 @@ select:hover {
 select.top-row {
   font-size: 16pt;
   padding-left: 8px;
+  padding-right: 20px;
   height: 60px;
 }
 
@@ -224,4 +225,31 @@ select.titleSet {
   margin-top: 10px;
 }
 
-@import 'infobutton'
+@import 'infobutton';
+
+@media only screen and (max-width : 795px) {
+select.top-row {
+  font-size: 12pt;
+}
+select.titleSet {
+  font-size: 16pt;
+}
+.top-label {
+  font-size: 12pt;
+}
+
+#stats {
+  width: 140px;
+  strong {
+    font-size: 12pt;
+  }
+  .num {
+    font-size: 12pt;
+  }
+}
+
+.notes {
+  width: 67%;
+  font-size: 12pt;
+}
+}
