@@ -210,6 +210,11 @@ select.titleSet {
   top: -20px;
 }
 
+#logolink {
+  text-decoration: none;
+  color: inherit;
+}
+
 
 .notes {
   float: left;
@@ -223,6 +228,18 @@ select.titleSet {
 
 #footer {
   margin-top: 10px;
+}
+
+.stashline {
+  padding-top: 20px;
+  img {
+    width: 64px;
+    float: left;
+  }
+  p {
+    float: left;
+    width: 450px;
+  }
 }
 
 @import 'infobutton';
@@ -251,5 +268,9 @@ select.titleSet {
 .notes {
   width: 67%;
   font-size: 12pt;
+}
+
+.stashline {
+  display: none;
 }
 }
