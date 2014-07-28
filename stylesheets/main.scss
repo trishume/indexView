@@ -1,6 +1,3 @@
----
----
-
 $border-color: #CCCCCC;
 
 body {
@@ -241,8 +238,6 @@ select.titleSet {
     width: 450px;
   }
 }
-
-@import 'infobutton';
 
 @media only screen and (max-width : 795px) {
 select.top-row {
