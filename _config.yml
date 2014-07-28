@@ -1,8 +1,6 @@
 port: 4444
 
 assets:
-  sources:
-    - js
-    - stylesheets
+  baseurl: assets/
   css_compressor: sass
   js_compressor:  uglifier
