@@ -1,15 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>S&amp;P Viewer</title>
-  <link href="main.css" rel="stylesheet">
-  <script type="text/javascript" src="js/lib.js"></script>
-  <script type="text/javascript" src="js/dateField.js"></script>
-  <script type="text/javascript" src="js/statView.js"></script>
-  <script type="text/javascript" src="js/viewer.js"></script>
-  <script type="text/javascript" src="js/stats.js"></script>
-  <script type="text/javascript" src="js/data.js"></script>
-  <script type="text/javascript" src="js/main.js"></script>
+  <title>IndexView - S&amp;P Viewer</title>
+  <script src="/assets/app-5a90c08a7a60453ae39ebfc3fa659697.js"></script>
+  <link rel="stylesheet" href="/assets/app-a82eba2903e2dc3315f55da5e9957291.css">
+  <link href='http://fonts.googleapis.com/css?family=PT+Sans+Caption:400,700' rel='stylesheet' type='text/css'>
 </head>
 <body onload="load();">
   <div id="container" class="left-box">
@@ -47,7 +42,7 @@
 
     <div class="bottom-row">
       <div class="logo left-box">
-        IndexView<br>
+        <a href="http://thume.net/indexView" id="logolink" target="_parent">IndexView</a><br>
         <small>By <a href="http://thume.ca/">Tristan Hume</a></small>
       </div>
       <div class="notes">
@@ -56,5 +51,21 @@
       </div>
     </div>
   </div>
+  <div class="stashline">
+    <a href="http://thume.ca/stashline"><img src="stashline.png"></a>
+    <p>
+      If you like this you might also be interested in <a href="http://thume.ca/stashline">StashLine</a> my personal finance planning app for IOS.
+    </p>
+  </div>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-38316132-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
 </body>
 </html>
