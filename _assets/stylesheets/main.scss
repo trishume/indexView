@@ -121,14 +121,14 @@ select {
   background-color: white;
   background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iM3B4IiB2aWV3Qm94PSIwIDAgNiAzIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCA2IDMiIHhtbDpzcGFjZT0icHJlc2VydmUiPjxwb2x5Z29uIHBvaW50cz0iNS45OTIsMCAyLjk5MiwzIC0wLjAwOCwwICIvPjwvc3ZnPg==');
   background-repeat: no-repeat;
-  background-position: 97% center;
+  background-position: right 9px center;
 
   border: solid $border-color;
   border-width: 0px 1px;
   border-radius: 0px;
 
 
-  padding: 0.2rem;
+  padding: 0.4rem 0.2rem;
   font-size: 12pt;
   font-family: 'PT Sans Caption', sans-serif;
   color: rgba(0, 0, 0, 0.75);
@@ -138,8 +138,8 @@ select {
 }
 
 select:hover {
-    /*background-color: #f3f3f3;*/
-    border-color: #999999;
+    background-color: #f6f6f6;
+    // border-color: #999999;
 }
 
 // select:active {
