@@ -3,62 +3,74 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>IndexView - S&amp;P Viewer</title>
+  <title>IndexView - Long Term S&amp;P 500 Viewer</title>
+  <meta name="description" content="IndexView helps you visualize long term trends in economic data. It includes long term S&amp;P 500 data going back to 1871.">
   {% javascript app %}
   {% stylesheet app %}
   <link href='http://fonts.googleapis.com/css?family=PT+Sans+Caption:400,700' rel='stylesheet' type='text/css'>
 </head>
 <body onload="load();">
-  <div id="container" class="left-box">
-    <div id="datasets">
-      <select name="datasets" id="dataset-chooser" onchange="setChooserChanged()" class="titleSet top-row left-box"></select>
-      <div id="overlay-form">
-        <span class="top-label">Overlay: </span>
-        <select name="overlays" id="overlay-chooser" onchange="overlayChanged()" class="right-box top-row">
-        </select>
+  <div id="container">
+    <div id="app">
+      <div id="datasets">
+        <select name="datasets" id="dataset-chooser" onchange="setChooserChanged()" class="titleSet top-row left-box"></select>
+        <div id="overlay-form">
+          <span class="top-label">Overlay: </span>
+          <select name="overlays" id="overlay-chooser" onchange="overlayChanged()" class="right-box top-row">
+          </select>
+        </div>
+        <div class="clear"></div>
       </div>
-      <div class="clear"></div>
-    </div>
-    <div id="widget">
-      <div class="time">
-        <span id="time-mode-0">
-          <span id="date-field-0"></span>
-          <a href="#" onclick="Viewer.changeMode()" class="modeChange">to</a>
-          <span id="date-field-3"></span>
-        </span>
-        <span id="time-mode-1">
-          <span id="date-field-1"></span>
-          <a href="#" onclick="Viewer.changeMode()" class="modeChange">for years:</a>&nbsp;
-          <input type="text" id="yearCount" onchange="Viewer.fieldChanged()" class="time-field">
-        </span>
-        <span id="time-mode-2">
-          <span id="date-field-2"></span>
-          <a href="#" onclick="Viewer.changeMode()" class="modeChange">to present</a>
-        </span>
+      <div id="widget">
+        <div class="time">
+          <span id="time-mode-0">
+            <span id="date-field-0"></span>
+            <a href="#" onclick="Viewer.changeMode()" class="modeChange">to</a>
+            <span id="date-field-3"></span>
+          </span>
+          <span id="time-mode-1">
+            <span id="date-field-1"></span>
+            <a href="#" onclick="Viewer.changeMode()" class="modeChange">for years:</a>&nbsp;
+            <input type="text" id="yearCount" onchange="Viewer.fieldChanged()" class="time-field">
+          </span>
+          <span id="time-mode-2">
+            <span id="date-field-2"></span>
+            <a href="#" onclick="Viewer.changeMode()" class="modeChange">to present</a>
+          </span>
+        </div>
+        <canvas id="graph" width="625" height="300"></canvas>
+        <div id="stats">
+        </div>
+        <div class="sep"></div>
       </div>
-      <canvas id="graph" width="625" height="300"></canvas>
-      <div id="stats">
-      </div>
-      <div class="sep"></div>
-    </div>
 
-    <div class="bottom-row">
-      <div class="logo left-box">
-        <a href="http://thume.ca/indexView" id="logolink" target="_parent">IndexView</a><br>
-        <small>By <a href="http://thume.ca/">Tristan Hume</a></small>
-      </div>
-      <div class="notes">
-        <strong>Data Notes: </strong><br>
-        <span id="dataset-notes"></span>
+      <div class="bottom-row">
+        <div class="logo left-box">
+          <a href="http://thume.ca/indexView" id="logolink" target="_parent">IndexView</a><br>
+          <small>By <a href="http://thume.ca/">Tristan Hume</a></small>
+        </div>
+        <div class="notes">
+          <strong>Data Notes: </strong><br>
+          <span id="dataset-notes"></span>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="stashline">
-    <a href="http://thume.ca/stashline"><img src="stashline.png"></a>
-    <p>
-      If you like this you might also be interested in <a href="http://thume.ca/stashline">StashLine</a> my personal finance planning app for IOS.
-    </p>
-    <p><small>The source code for this tool is on <a href="//github.com/trishume/indexView">Github</a></small></p>
+    <div class="extra">
+      <a href="http://thume.ca/stashline"><img src="stashline.png" class="stashline"></a>
+      <p class="descript">
+        If you like this you might also be interested in <a href="http://thume.ca/stashline">StashLine</a> my personal finance planning app for IOS.
+      </p>
+      <br style="clear:both;">
+      <h2>About IndexView</h2>
+      <p>IndexView helps you visualize long term trends in economic data. It includes long term S&amp;P 500 data going back to 1871 as well as housing and indicator data. Use it to understand the average market returns in multiple ways including with and without inflation and dividends.</p>
+      <p>
+        Use the boxes at the top left or scroll on the graph to select a time period. Different statistics on the left give you a sense of how much the market grew during the time period shown. You can overlay other data on the graph using the box in the top right to see how data sets relate.
+      </p>
+      <p>
+        This app was created by <a href="http://thume.ca/">Tristan Hume</a> in collaboration with <a href="http://mrmoneymustache.com">Mr. Money Mustache</a> as a way to showcase the power of the stock market to multiply investments hundreds of times over a lifetime.
+      </p>
+      <p><small>The source code for this tool is on <a href="//github.com/trishume/indexView">Github</a></small></p>
+    </div>
   </div>
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

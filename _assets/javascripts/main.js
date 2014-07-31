@@ -48,7 +48,7 @@ function loadOverlay(setNum) {
 }
 
 function sizeCanvas() {
-  var width = document.body.clientWidth;
+  var width = $('container').clientWidth;
   var canvas = $('graph');
   var statsPad = (width < 795) ? 170 : 205;
   canvas.width = width - statsPad;

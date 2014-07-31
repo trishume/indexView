@@ -1,11 +1,23 @@
 $border-color: #CCCCCC;
 
 body {
+  margin: 0px;
+}
+
+#container {
   font-family: 'PT Sans Caption', sans-serif;
   width: 100%;
   min-width: 700px;
   max-width: 1300px;
-  margin: 0px;
+
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+#app {
+  border: solid $border-color;
+  border-width: 1px 1px 0px 1px;
 }
 
 #widget {
@@ -227,13 +239,15 @@ select.titleSet {
   margin-top: 10px;
 }
 
-.stashline {
+.extra {
   padding-top: 20px;
-  img {
+  padding-left: 10px;
+  .stashline {
     width: 64px;
     float: left;
+    margin-left: -10px;
   }
-  p {
+  .descript {
     float: left;
     width: 450px;
   }
