@@ -124,6 +124,7 @@ loadData: function (data) {
 
   this.firstYear = data.firstYear;
   this.endMonth = Math.min(this.endMonth, this.maxMonth);
+  this.scrollBuffer = 1.0;
 
   this.clearOverlay();
   this.loadStatViews(data);
@@ -180,7 +181,7 @@ fieldChanged: function() {
 },
 
 clampTimespan: function() {
-  this.startMonth = Math.min(Math.max(this.startMonth,0), this.maxMonth);
+  this.startMonth = Math.min(Math.max(this.startMonth,0), this.maxMonth-12);
   this.endMonth   = Math.min(Math.max(this.endMonth,this.startMonth+12), this.maxMonth);
 },
 
@@ -208,9 +209,16 @@ zoom: function (event) {
   var mouseX = event.clientX - this.canvas.offsetParent.offsetLeft - this.canvas.offsetLeft;
 
   var centerMonth = this.xToMonth(mouseX);
-  var factor = 1 + delta * -0.1;
+  var factor = (1 + delta * -0.1) * this.scrollBuffer;
+  var prevStart = this.startMonth, prevEnd = this.endMonth;
   this.endMonth = Math.round(factor*this.endMonth - centerMonth*(factor - 1));
   this.startMonth = Math.round(factor*this.startMonth + centerMonth*(1 - factor));
+
+  if(this.startMonth != prevStart && this.endMonth != prevEnd) {
+    this.scrollBuffer = 1.0;
+  } else if(factor > 1.0) {
+    this.scrollBuffer = factor;
+  }
 
   this.clampTimespan();
   this.draw();
