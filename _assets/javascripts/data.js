@@ -26,7 +26,7 @@ var dataSets = [
   },
   {
     name: "Real S&P500 (With Dividends)",
-    notes: shillerInfo + " Not inflation adjusted. Includes reinvested dividends.",
+    notes: shillerInfo + " Inflation adjusted. Includes reinvested dividends.",
     file: "shiller_real.json",
     group: "s&pIndex",
     stats: defaultStats,
