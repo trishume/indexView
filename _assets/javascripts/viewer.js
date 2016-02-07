@@ -51,7 +51,9 @@ loadCanvas: function () {
   this.loadDateFields();
   this.loadTimeChooser();
 
+  // startMonth is an inclusive start
   this.startMonth = 1200;
+  // endMonths is an exclusive end
   this.endMonth = Infinity;
 
   this.data = [];
@@ -162,7 +164,8 @@ fieldChanged: function() {
   }
 
   if(this.curTimeMode == 0) {
-    var endMonth = this.dateFields[3].getMonthInRange(this.firstYear,this.maxMonth);
+    // +1 because we want date fields inclusive but this.endMonth exclusive
+    var endMonth = this.dateFields[3].getMonthInRange(this.firstYear,this.maxMonth)+1;
 
     if(endMonth != null) {
       this.endMonth = endMonth;
@@ -232,7 +235,7 @@ dateText: function(month) {
 },
 
 traceVal: function(data, month) {
-  var end = this.toIndex(data, month)+1;
+  var end = this.toIndex(data, month);
   return Stats.finalValue.calc(data.vals,0, end);
 },
 
@@ -242,7 +245,7 @@ traceGrowth: function(data, month) {
   return Stats.totalGrowth.calc(data.vals, start, end);
 },
 
-trace: function(x) {
+trace: function(mouseX) {
   this.draw();
 
   var ctx = this.ctx;
@@ -254,14 +257,13 @@ trace: function(x) {
   ctx.fillStyle = "rgb(130,130,130)";
 
   var data = this.data[0];
-  var fmonth = this.xToMonth(x);
-  var month = Math.floor(fmonth);
+  var fmonth = this.xToMonth(mouseX);
+  var month = Math.round(fmonth);
   fmonth = (fmonth % data.pointJump) / data.pointJump;
 
-  var v1 = data.vals[this.toIndex(data, month)];
-  var v2 = data.vals[this.toIndex(data, month)+1] || v1;
-  var val = (1-fmonth)*v1 + fmonth*v2;
+  var val = data.vals[this.toIndex(data, month)];
   var y = this.valToY(data.curRng, this.bigGraph, val);
+  var x = (month-this.startMonth) * (this.width/(this.endMonth-this.startMonth-1));
 
   // trace dot
   ctx.fillStyle = data.color;
@@ -306,7 +308,8 @@ updateTimeFields: function() {
 
   this.dateFields[this.curTimeMode].setDateFrom(this.startMonth, this.firstYear);
   if(this.curTimeMode == 0) {
-    this.dateFields[3].setDateFrom(this.endMonth, this.firstYear);
+    // -1 because we want date fields inclusive but this.endMonth exclusive
+    this.dateFields[3].setDateFrom(this.endMonth-1, this.firstYear);
   } else if(this.curTimeMode == 1) {
     $('yearCount').value = endYear - startYear;
   } else if(this.curTimeMode == 2) {
@@ -333,7 +336,7 @@ indexToMonth: function(data, i) {
 },
 
 xToMonth: function(x) {
-  var span = this.endMonth-this.startMonth;
+  var span = this.endMonth-this.startMonth-1;
   return this.startMonth + x/(this.width/span);
 },
 
@@ -425,9 +428,9 @@ drawLines: function(opt, startMonth, endMonth){
 drawData: function (data, graph, startMonth, endMonth, rng){
   var ctx = this.ctx;
   var start = this.toIndex(data, startMonth);
-  var end = this.toIndex(data, endMonth)+1;
+  var end = this.toIndex(data, endMonth);
   var span = end-start;
-  var dx = (this.width/(endMonth-startMonth));
+  var dx = (this.width/(endMonth-startMonth-1));
   var jump = (data.pointJump == 1) ? Math.ceil(span/graph.width) : 1;
 
   // Graph
