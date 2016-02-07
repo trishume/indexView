@@ -275,10 +275,14 @@ trace: function(mouseX) {
   ctx.textAlign = "right";
   var growthText = this.traceGrowth(data, month);
   var growStyle = (growthText[0] == "-") ? "red" : "green";
+  if(y < 100 && x < 300) y += 100;
   if(data.traceShowValue) {
     var valText = this.traceVal(data, month);
     ctx.fillStyle = "black";
     ctx.font = "14pt Arial";
+    var textW = ctx.measureText(valText).width+15;
+    if(x < textW) x = textW;
+    if(y < 35) y += 35;
     ctx.fillText(valText, x - 10, y - 17);
     ctx.fillStyle = growStyle;
     ctx.font = "10pt Arial";
@@ -286,6 +290,8 @@ trace: function(mouseX) {
   } else {
     ctx.font = "12pt Arial";
     ctx.fillStyle = growStyle;
+    var textW = ctx.measureText(growthText).width+15;
+    if(x < textW) x = textW;
     ctx.fillText(growthText, x - 10, y - 5);
   }
 
