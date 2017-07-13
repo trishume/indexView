@@ -1,5 +1,6 @@
 port: 4444
 exclude: ["Gemfile", "Gemfile.lock", "Rakefile", "csvimport.rb", "shiller.csv", "Readme.md"]
+baseurl: /indexView
 
 assets:
   baseurl: assets/
