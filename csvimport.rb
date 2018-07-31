@@ -14,7 +14,7 @@ REAL_DIVIDEND = 8
 REAL_EARNINGS = 9
 PE10 = 10
 
-raw_csv = CSV.read("shiller.csv")
+raw_csv = CSV.read(ARGV[0] || "shiller.csv")
 data_rows = raw_csv.select {|r| r[DATE] =~ /^....\...?$/ }
 
 p data_rows.length
