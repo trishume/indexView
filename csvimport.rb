@@ -1,6 +1,10 @@
 require "csv"
 require "json"
 
+# Generate the CSV with
+# xlsx2csv
+# or by opening in Numbers and exporting to CSV
+
 # Columns:
 DATE = 0
 SNP = 1
@@ -11,8 +15,7 @@ DATE_FRACTION = 5
 LONG_INTEREST_RATE = 6
 REAL_PRICE = 7
 REAL_DIVIDEND = 8
-REAL_EARNINGS = 9
-PE10 = 10
+REAL_EARNINGS = 10
 
 raw_csv = CSV.read(ARGV[0] || "shiller.csv")
 data_rows = raw_csv.select {|r| r[DATE] =~ /^....\...?$/ }
