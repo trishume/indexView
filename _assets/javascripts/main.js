@@ -51,8 +51,13 @@ function sizeCanvas() {
   var width = $('container').clientWidth;
   var canvas = $('graph');
   var statsPad = (width < 795) ? 170 : 205;
-  canvas.width = width - statsPad;
-  canvas.height = Math.max(canvas.width * 0.4, 320);
+  raw_width = width - statsPad;
+  raw_height = Math.max(raw_width * 0.4, 320);
+  canvas.style.width=raw_width + 'px';
+  canvas.style.height=raw_height + 'px';
+  var dpr = window.devicePixelRatio || 1;
+  canvas.width = raw_width*dpr;
+  canvas.height = raw_height*dpr;
   Viewer.loadSize();
 }
 

@@ -2,7 +2,12 @@ var Viewer = {
 loadCanvas: function () {
   this.canvas = $('graph');
   if (this.canvas.getContext) {
+    // var dpr = window.devicePixelRatio || 1;
+    // var rect = this.canvas.getBoundingClientRect();
+    // this.canvas.width = rect.width * dpr;
+    // this.canvas.height = rect.height * dpr;
     this.ctx = this.canvas.getContext('2d');
+    // this.ctx.scale(dpr,dpr);
 
     var _zoom = this.zoom.bind(this);
     var mousewheelevt=(/Firefox/i.test(navigator.userAgent))? "DOMMouseScroll" : "mousewheel";
@@ -67,8 +72,10 @@ loadSize: function() {
 
   // this.canvas.height = this.height;
   // this.canvas.width = this.width;
-  this.width = this.canvas.width;
-  this.height = this.canvas.height;
+  var dpr = window.devicePixelRatio || 1;
+  this.width = this.canvas.width / dpr;
+  this.height = this.canvas.height / dpr;
+  this.ctx.scale(dpr,dpr);
 
   this.bigGraph.width = this.width;
   this.bigGraph.bottom = this.height - 70;
