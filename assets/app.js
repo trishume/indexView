@@ -138,7 +138,12 @@ var Viewer = {
 loadCanvas: function () {
   this.canvas = $('graph');
   if (this.canvas.getContext) {
+    // var dpr = window.devicePixelRatio || 1;
+    // var rect = this.canvas.getBoundingClientRect();
+    // this.canvas.width = rect.width * dpr;
+    // this.canvas.height = rect.height * dpr;
     this.ctx = this.canvas.getContext('2d');
+    // this.ctx.scale(dpr,dpr);
 
     var _zoom = this.zoom.bind(this);
     var mousewheelevt=(/Firefox/i.test(navigator.userAgent))? "DOMMouseScroll" : "mousewheel";
@@ -203,8 +208,10 @@ loadSize: function() {
 
   // this.canvas.height = this.height;
   // this.canvas.width = this.width;
-  this.width = this.canvas.width;
-  this.height = this.canvas.height;
+  var dpr = window.devicePixelRatio || 1;
+  this.width = this.canvas.width / dpr;
+  this.height = this.canvas.height / dpr;
+  this.ctx.scale(dpr,dpr);
 
   this.bigGraph.width = this.width;
   this.bigGraph.bottom = this.height - 70;
@@ -973,8 +980,13 @@ function sizeCanvas() {
   var width = $('container').clientWidth;
   var canvas = $('graph');
   var statsPad = (width < 795) ? 170 : 205;
-  canvas.width = width - statsPad;
-  canvas.height = Math.max(canvas.width * 0.4, 320);
+  raw_width = width - statsPad;
+  raw_height = Math.max(raw_width * 0.4, 320);
+  canvas.style.width=raw_width + 'px';
+  canvas.style.height=raw_height + 'px';
+  var dpr = window.devicePixelRatio || 1;
+  canvas.width = raw_width*dpr;
+  canvas.height = raw_height*dpr;
   Viewer.loadSize();
 }
 
