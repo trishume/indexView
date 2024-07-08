@@ -112,7 +112,7 @@ var dataSets = [
   },
   {
     name: "Shiller Home Price Index",
-    notes: "Index that approxmately tracks the price of housing, adjusted for inflation. " + shillerHousing,
+    notes: "Index that approximately tracks the price of housing, adjusted for inflation. " + shillerHousing,
     file: "shiller_housing.json",
     goodOverlay: true,
     traceShowValue: true,
@@ -125,7 +125,7 @@ var dataSets = [
   },
   {
     name: "Shiller Building Cost Index",
-    notes: "Index that approxmately tracks the cost of building, adjusted for inflation. " + shillerHousing,
+    notes: "Index that approximately tracks the cost of building, adjusted for inflation. " + shillerHousing,
     file: "shiller_housing.json",
     goodOverlay: true,
     traceShowValue: true,
